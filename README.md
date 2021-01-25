@@ -25,3 +25,4 @@
 - pseudo-cron
 - expose gql endpoint with MAs
 - crunch MAs on the fly
+- add logging for errors

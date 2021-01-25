@@ -1,9 +1,15 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/samthomson/oracle",
   "author": "samt@samt.st",
   "license": "UNLICENSED",
-  "private": true
+  "private": true,
+  "scripts": {
+    "test-run": "ts-node src/pull-data.ts"
+  },
+  "dependencies": {
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
 }
