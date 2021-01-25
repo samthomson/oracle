@@ -20,9 +20,8 @@
 
 ## todo
 
-- dockerize
-- pseudo-cron
 - call CMC and get price data
 - save data to DB
+- pseudo-cron
 - expose gql endpoint with MAs
 - crunch MAs on the fly
