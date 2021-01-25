@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/samthomson/oracle",
+  "author": "samt@samt.st",
+  "license": "UNLICENSED",
+  "private": true
+}

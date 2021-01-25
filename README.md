@@ -1,5 +1,18 @@
 # oracle
 
+## set up
+
+### initial setup
+
+1. `cp .env.sample .env` and fill in values
+`docker-compose build`
+2. `docker-compose run api yarn --silent`
+
+
+## running
+
+`docker-compose up`
+
 ## how it works
 
 - call CMC every x (five) minutes to get all currency prices, store in db.
