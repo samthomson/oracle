@@ -6,7 +6,8 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "test-run": "ts-node src/pull-data.ts"
+    "test-run": "ts-node src/pull-data.ts",
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
   },
   "dependencies": {
     "node-fetch": "^2.6.1",
