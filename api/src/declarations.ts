@@ -1,30 +1,30 @@
 export type CMCListing = {
-	id: number,
-	name: string,
-	symbol: string,
-	slug: string,
-	num_market_pairs: number,
-	date_added: string,
-	// tags: [Array],
-	max_supply: null,
-	circulating_supply: number,
-	total_supply: number,
-	// platform: [Object],
-	cmc_rank: number,
-	last_updated: string,
-	quote: CMCQuote
+    id: number
+    name: string
+    symbol: string
+    slug: string
+    num_market_pairs: number
+    date_added: string
+    // tags: [Array],
+    max_supply: null
+    circulating_supply: number
+    total_supply: number
+    // platform: [Object],
+    cmc_rank: number
+    last_updated: string
+    quote: CMCQuote
 }
 
 type CMCQuote = {
-	[key: string]: {
-		price: number,
-		volume_24h: number,
-		percent_change_1h: number,
-		percent_change_24h: number,
-		percent_change_7d: number,
-		market_cap: number,
-		last_updated: string
-	}
+    [key: string]: {
+        price: number
+        volume_24h: number
+        percent_change_1h: number
+        percent_change_24h: number
+        percent_change_7d: number
+        market_cap: number
+        last_updated: string
+    }
 }
 
 // {
