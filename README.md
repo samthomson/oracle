@@ -13,6 +13,9 @@
 
 `docker-compose up`
 
+api: `//localhost:3100`
+phpmyadmin: `//localhost:3100`
+
 ## how it works
 
 - call CMC every x (five) minutes to get all currency prices, store in db.
@@ -25,4 +28,4 @@
 - expose gql endpoint with MAs
 - crunch MAs on the fly
 - add logging for errors
-- prettier
+- prettier: https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project/
