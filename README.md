@@ -28,4 +28,3 @@ phpmyadmin: `//localhost:3100`
 - expose gql endpoint with MAs
 - crunch MAs on the fly
 - add logging for errors
-- prettier: https://www.robertcooper.me/using-eslint-and-prettier-in-a-typescript-project/
