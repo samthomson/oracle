@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "test-run": "ts-node src/pull-data.ts",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "node-fetch": "^2.6.1",
