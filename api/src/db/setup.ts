@@ -1,7 +1,4 @@
 import * as Sequelize from 'sequelize'
-// import database from './dbSetup'
-
-import * as Types from '../declarations'
 
 const dbConfig = {
     host: 'mysql',
