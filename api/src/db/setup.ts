@@ -2,9 +2,9 @@ import * as Sequelize from 'sequelize'
 
 const dbConfig = {
     host: 'mysql',
-    database: 'oracle',
-    username: 'root',
-    password: 'admin',
+    database: process.env.MYSQL_DATABASE,
+    username: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
     dialect: 'mysql',
     logging: false,
 }
