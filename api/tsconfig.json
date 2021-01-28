@@ -4,5 +4,6 @@
 			"dom",
 			"ES2015"
 		],
+		"downlevelIteration": true
   	}
 }

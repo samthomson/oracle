@@ -8,7 +8,7 @@ export const getValues = async (): Promise<Types.CMCListing[]> => {
         }
 
         const response = await fetch(
-            ` https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=5&convert=BTC`,
+            ` https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=5000&convert=BTC`,
             { headers },
         )
 
