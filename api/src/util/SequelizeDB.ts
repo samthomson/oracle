@@ -1,4 +1,3 @@
-// import * as Sequelize from 'sequelize'
 import * as SequelizeDatabase from '../db/setup'
 
 import * as Types from '../declarations'
