@@ -1,4 +1,3 @@
-// import { getValues } from './services/cmc-data'
 import { getValues } from './services/nomics-data'
 import * as DB from './util/db'
 import * as DBS from './util/SequelizeDB'
@@ -9,22 +8,27 @@ const testRun = async () => {
     // ensure tables exist
     await SequelizeDB.sync()
 
-    const values = await getValues()
+    // pull all currency data
+    const nomicsCurrencies = await getValues()
 
-    // const firstValues = values.filter((v, i) => i < 5000)
+    // filter down to just the data we need
+    const currencies = nomicsCurrencies.map((cur) => ({
+        id: cur.id,
+        name: cur.name,
+        symbol: cur.symbol,
+        price: cur.price,
+    }))
 
-    console.log(values.length, ' currencies received')
-
-    const currencies = values.map((cur) => ({ id: cur.id, name: cur.name, symbol: cur.symbol, price: cur.price }))
-
+    // create an initial log entry in the db, so we have an id to relate other models against
     const logEntry = await DBS.createLogEntry()
 
+    // for each currency, ensure it exists in the db, then store a currency price against it
     for (let i = 0; i < currencies.length; i++) {
         const currency = await DBS.ensureCurrencyExists(currencies[i])
         await DBS.createCurrencyEntry(currency.id, logEntry.id, currencies[i])
     }
 
-    // const added = await DBS.ensureCurrenciesExistInDB(ensureCurrenciesExistInput)
+    // wrap up our log entry with the amount of currency entries created
     logEntry.currenciesSaved = currencies.length
     logEntry.save()
 
@@ -55,5 +59,5 @@ const testRelations = async () => {
 }
 
 console.log('\ndata test stub')
-// testRun()
-testRelations()
+testRun()
+// testRelations()
