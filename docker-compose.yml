@@ -14,7 +14,6 @@ services:
       - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - NODE_ENV=development
       - LOG_LEVEL=info
-      - DATABASE_URL="mysql://root:${MYSQL_ROOT_PASSWORD}@mysql:3306/${DATABASE_NAME}"
     ports:
       - "3100:3100"
     volumes:
