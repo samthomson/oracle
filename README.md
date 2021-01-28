@@ -18,7 +18,7 @@ phpmyadmin: `//localhost:3100`
 
 ## how it works
 
-- call CMC every x (five) minutes to get all currency prices, store in db.
+- call nomics every x (five) minutes to get all currency prices, store in db.
 - expose gql api containing moving averages. These can be calculated on the fly by looking at the pricing data in db.
 
 ## todo
