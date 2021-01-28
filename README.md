@@ -28,3 +28,6 @@ phpmyadmin: `//localhost:3100`
 - expose gql endpoint with MAs
 - crunch MAs on the fly
 - add logging for errors
+
+maybe later:
+- replace sequelize with TypeORM
