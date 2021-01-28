@@ -23,7 +23,6 @@ phpmyadmin: `//localhost:3100`
 
 ## todo
 
-- save data to DB
 - pseudo-cron
 - expose gql endpoint with MAs
 - crunch MAs on the fly
