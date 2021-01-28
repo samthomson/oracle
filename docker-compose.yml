@@ -6,7 +6,7 @@ services:
       dockerfile: ./api/Dockerfile
     # command: yarn run watch
     environment:
-      - CMC_API_KEY=${CMC_API_KEY}      
+      - NOMICS_API_KEY=${NOMICS_API_KEY}   
       - MYSQL_HOST=mysql
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_DATABASE_TESTING=${MYSQL_DATABASE_TESTING}
