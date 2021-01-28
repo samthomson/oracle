@@ -23,8 +23,6 @@ phpmyadmin: `//localhost:3100`
 
 ## todo
 
-- deployment
-- pseudo-cron
 - expose gql endpoint with MAs
 - crunch MAs on the fly
 - add logging for errors
