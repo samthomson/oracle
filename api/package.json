@@ -8,9 +8,12 @@
   "scripts": {
     "test-run": "ts-node src/pull-data.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "forever": "forever start -c ts-node ./src/pseudo-cron.ts"
   },
   "dependencies": {
+    "cron": "^1.8.2",
+    "forever": "^3.0.4",
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
     "sequelize": "^6.5.0",

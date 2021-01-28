@@ -4,7 +4,8 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
-    command: yarn
+    command: 
+      [sh, -c, "yarn & npm run forever && tail -F anything"]
     environment:
       - NOMICS_API_KEY=${NOMICS_API_KEY}   
       - MYSQL_HOST=mysql

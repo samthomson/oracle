@@ -2,7 +2,7 @@ import { getValues } from './services/nomics-data'
 import * as DBUtil from './util/SequelizeDB'
 import * as SequelizeDatabase from './db/setup'
 
-const testRun = async () => {
+export const pullData = async () => {
     // ensure tables exist
     await SequelizeDatabase.ensureDBSynced()
 
@@ -58,6 +58,6 @@ const testRelations = async () => {
     */
 }
 
-console.log('\ndata test stub')
-testRun()
+// console.log('\ndata test stub')
+// pullData()
 // testRelations()
