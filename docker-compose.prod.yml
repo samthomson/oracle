@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
-    # command: yarn run watch
+    command: yarn
     environment:
       - NOMICS_API_KEY=${NOMICS_API_KEY}   
       - MYSQL_HOST=mysql
@@ -27,7 +27,7 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_DATABASE=${DATABASE_NAME}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD_PROD}
     volumes:
       - mysqldata:/var/lib/mysql
       - ./mysql/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
@@ -37,7 +37,7 @@ services:
     environment:
       - PMA_ARBITRARY=1
       - MYSQL_USER=root
-      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD_PROD}
       - UPLOAD_LIMIT=200000000
     ports:
       - "8080:80"
