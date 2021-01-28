@@ -1,12 +1,10 @@
 import { getValues } from './services/nomics-data'
-import * as DB from './util/db'
-import * as DBS from './util/SequelizeDB'
-import SequelizeDB from './db/setup'
-import * as SequelizeDatabaseModels from './db/setup'
+import * as DBUtil from './util/SequelizeDB'
+import * as SequelizeDatabase from './db/setup'
 
 const testRun = async () => {
     // ensure tables exist
-    await SequelizeDB.sync()
+    await SequelizeDatabase.ensureDBSynced()
 
     // pull all currency data
     const nomicsCurrencies = await getValues()
@@ -20,12 +18,12 @@ const testRun = async () => {
     }))
 
     // create an initial log entry in the db, so we have an id to relate other models against
-    const logEntry = await DBS.createLogEntry()
+    const logEntry = await DBUtil.createLogEntry()
 
     // for each currency, ensure it exists in the db, then store a currency price against it
     for (let i = 0; i < currencies.length; i++) {
-        const currency = await DBS.ensureCurrencyExists(currencies[i])
-        await DBS.createCurrencyEntry(currency.id, logEntry.id, currencies[i])
+        const currency = await DBUtil.ensureCurrencyExists(currencies[i])
+        await DBUtil.createCurrencyEntry(currency.id, logEntry.id, currencies[i])
     }
 
     // wrap up our log entry with the amount of currency entries created
@@ -37,8 +35,9 @@ const testRun = async () => {
 
 const testRelations = async () => {
     // get currency entries for 'ABBC'
-    await SequelizeDB.sync()
+    await SequelizeDatabase.ensureDBSynced()
 
+    /*
     const abbc = await SequelizeDatabaseModels.Currency.findOne({
         where: { nomicsId: 'ABBC' },
         include: SequelizeDatabaseModels.CurrencyEntry,
@@ -56,6 +55,7 @@ const testRelations = async () => {
     // const { entries } = abbc
 
     // console.log(entries.length)
+    */
 }
 
 console.log('\ndata test stub')

@@ -78,8 +78,11 @@ export const CurrencyEntry = database.define(
     },
 )
 
-Currency.hasMany(CurrencyEntry)
-LogEntry.hasMany(CurrencyEntry)
+export const ensureDBSynced = async () => {
+    await database.sync()
+    Currency.hasMany(CurrencyEntry)
+    LogEntry.hasMany(CurrencyEntry)
+}
 
 database.authenticate().catch(() => {
     console.error('Could not connect to database!')
