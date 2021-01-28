@@ -17,22 +17,6 @@ const testRun = async () => {
 
     const currencies = values.map((cur) => ({ id: cur.id, name: cur.name, symbol: cur.symbol, price: cur.price }))
 
-    /*
-    const uniqueItems = [...new Set(firstValues.map((it) => it.symbol))]
-
-    console.log('unique count: ', uniqueItems.length)
-
-    const counts = {}
-    firstValues
-        .map((it) => it.symbol)
-        .forEach(function (x) {
-            counts[x] = (counts[x] || 0) + 1
-        })
-
-    const duplicates = Object.keys(counts).filter((sym) => counts[sym] > 1)
-
-    console.log(duplicates)
-    */
     const logEntry = await DBS.createLogEntry()
 
     for (let i = 0; i < currencies.length; i++) {
