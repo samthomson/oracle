@@ -11,8 +11,6 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/cli": "2.15.0",
-    "@prisma/client": "2.15.0",
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
     "sequelize": "^6.5.0",
