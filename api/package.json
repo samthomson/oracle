@@ -7,6 +7,7 @@
   "private": true,
   "scripts": {
     "test-run": "ts-node src/pull-data.ts",
+    "run-once": "ts-node src/run-once.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts"
