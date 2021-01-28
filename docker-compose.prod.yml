@@ -1,0 +1,53 @@
+version: "2"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    # command: yarn run watch
+    environment:
+      - NOMICS_API_KEY=${NOMICS_API_KEY}   
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_DATABASE_TESTING=${MYSQL_DATABASE_TESTING}
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - NODE_ENV=development
+      - LOG_LEVEL=info
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./api:/api
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=${DATABASE_NAME}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - mysqldata:/var/lib/mysql
+      - ./mysql/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - UPLOAD_LIMIT=200000000
+    ports:
+      - "8080:80"
+    expose: 
+      - "80"
+    volumes:
+      - /sessions
+    depends_on:
+      - mysql
+
+volumes:
+  mysqldata:
+    driver: "local"
