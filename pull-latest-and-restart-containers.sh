@@ -1,7 +1,7 @@
 #!bin/bash
 
 # pull latest and disregard and local changes
-git fetch origin main
+git fetch origin master
 git reset --hard FETCH_HEAD
 git clean -df
 
