@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
-    command: yarn run start-server
+    command: yarn run watch
     environment:
       - NOMICS_API_KEY=${NOMICS_API_KEY}   
       - MYSQL_HOST=${MYSQL_HOST}
