@@ -7,7 +7,7 @@ services:
     # command: yarn run watch
     environment:
       - NOMICS_API_KEY=${NOMICS_API_KEY}   
-      - MYSQL_HOST=mysql
+      - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_DATABASE_TESTING=${MYSQL_DATABASE_TESTING}
       - MYSQL_USER=root

@@ -1,3 +1,4 @@
 .env
 api/node_modules
 api/yarn-error.log
+db-backups
