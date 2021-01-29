@@ -73,3 +73,14 @@ export type NomicsListing = {
 //     "market_cap_change": "25069.00",
 //     "market_cap_change_pct": "0.0013"
 // }
+
+export type CurrencyQueryInput = {
+    nomicsId?: string
+    symbol?: string
+}
+
+export type Currency = {
+    nomicsId: string
+    name: string
+    symbol: string
+}

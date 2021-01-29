@@ -27,3 +27,21 @@ export const createCurrencyEntry: any = (currencyId: number, logEntryId: number,
         priceBTC: price,
     })
 }
+
+export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput): Promise<Types.Currency> => {
+    let whereQuery = {}
+
+    if (nomicsId) {
+        whereQuery = { nomicsId }
+    } else if (symbol) {
+        whereQuery = { symbol }
+    } else {
+        return undefined
+    }
+
+    const currency = await SequelizeDatabase.Currency.findOne({
+        where: whereQuery,
+        include: SequelizeDatabase.CurrencyEntry,
+    })
+    return currency.get()
+}
