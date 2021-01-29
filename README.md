@@ -24,6 +24,7 @@ phpmyadmin: `//localhost:3100`
 ## todo
 
 - expose gql endpoint with MAs
+- find a faster watch script
 - crunch MAs on the fly
 - add logging for errors
 - download logs script
