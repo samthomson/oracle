@@ -40,7 +40,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - UPLOAD_LIMIT=200000000
     ports:
-      - "8080:80"
+      - "8082:80"
     expose: 
       - "80"
     volumes:
