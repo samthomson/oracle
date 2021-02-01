@@ -1,4 +1,4 @@
-import * as Sequelize from 'sequelize'
+import Sequelize from 'sequelize'
 
 const dbConfig = {
     host: process.env.MYSQL_HOST,
@@ -10,7 +10,7 @@ const dbConfig = {
 }
 
 // @ts-ignore
-const database = new Sequelize(dbConfig)
+const database = new Sequelize.Sequelize(dbConfig)
 
 export const LogEntry = database.define(
     'log_entry',
@@ -87,4 +87,4 @@ export const connect = async () => {
 
 export default database
 
-export const disconnectDatabase = (): void => database.close()
+export const disconnectDatabase = (): Promise<void> => database.close()

@@ -4,6 +4,8 @@
 			"dom",
 			"ES2015"
 		],
-		"downlevelIteration": true
+		"downlevelIteration": true,
+		"outDir": "./dist",
+		"esModuleInterop": true
   	}
 }
