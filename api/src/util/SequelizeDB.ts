@@ -44,6 +44,9 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
         include: SequelizeDatabase.CurrencyEntry,
     })
 
-    // @ts-ignore
-    return { ...currency.get(), entries: currency.currency_entries }
+    return {
+        ...currency.get(),
+        // @ts-ignore
+        entries: currency.currency_entries,
+    }
 }

@@ -5,14 +5,27 @@ import * as DBUtil from '../util/SequelizeDB'
 
 // }
 
-export const getCurrency = async (input: Types.CurrencyQueryInput) => {
-    const { nomicsId, symbol } = input
+export const currency = async (parent: any, args: any, context: any, info: any) => {
+    const {
+        input: { nomicsId, symbol },
+    } = args
+
+    let currrency = undefined
 
     if (nomicsId) {
-        return DBUtil.getCurrency({ nomicsId })
+        currrency = await DBUtil.getCurrency({ nomicsId })
     }
     if (symbol) {
-        return DBUtil.getCurrency({ symbol })
+        currrency = await DBUtil.getCurrency({ symbol })
     }
-    return undefined
+
+    return {
+        ...currrency,
+        movingAverage: (parent, args, context, info) => {
+            const {
+                movingAverageInput: { period, frequency },
+            } = parent
+            return period * frequency
+        },
+    }
 }

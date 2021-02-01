@@ -1,5 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server'
 import * as Resolvers from './resolvers'
+import { currency } from './resolvers'
 import * as Types from '../declarations'
 import * as DB from '../db/setup'
 
@@ -9,6 +10,7 @@ const typeDefs = gql`
         name: String
         symbol: String
         entries: [CurrencyEntry]
+        movingAverage(movingAverageInput: MovingAverageInput): Float
     }
 
     type CurrencyEntry {
@@ -22,6 +24,11 @@ const typeDefs = gql`
         nomicsId: String
     }
 
+    input MovingAverageInput {
+        period: Int
+        frequency: Int
+    }
+
     # The "Query" type is special: it lists all of the available queries that
     # clients can execute, along with the return type for each. In this
     # case, the "books" query returns an array of zero or more Books (defined above).
@@ -33,8 +40,7 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        // currencies: () => ,
-        currency: async (parent, args, context, info) => await Resolvers.getCurrency(args.input),
+        currency,
     },
 }
 
@@ -47,5 +53,5 @@ DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {
-    console.log(`🚀  Server ready at ${url}`)
+    console.log(`\nServer ready at ${url}\n`)
 })
