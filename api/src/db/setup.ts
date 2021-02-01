@@ -81,7 +81,9 @@ export const ensureDBSynced = async () => {
     LogEntry.hasMany(CurrencyEntry)
 }
 
-database.authenticate().catch(() => console.error('Could not connect to database!'))
+export const connect = async () => {
+    await database.authenticate().catch(() => console.error('Could not connect to database!'))
+}
 
 export default database
 

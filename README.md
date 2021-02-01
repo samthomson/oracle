@@ -23,7 +23,11 @@ phpmyadmin: `//localhost:3100`
 
 ## todo
 
-- expose gql endpoint with MAs
+- find a faster watch script
+- expose gql endpoint
+	- moving average for a single currency
+	- moving average per multiple currency
+	- latest price per currency, single and as one of many
 - crunch MAs on the fly
 - add logging for errors
 - download logs script
