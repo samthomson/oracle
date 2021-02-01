@@ -8,6 +8,7 @@ const typeDefs = gql`
         nomicsId: String
         name: String
         symbol: String
+        entries: [CurrencyEntry]
     }
 
     type CurrencyEntry {
@@ -29,17 +30,6 @@ const typeDefs = gql`
         currency(input: CurrencyQueryInput): Currency
     }
 `
-
-const books = [
-    {
-        title: 'The Awakening',
-        author: 'Kate Chopin',
-    },
-    {
-        title: 'City of Glass',
-        author: 'Paul Auster',
-    },
-]
 
 const resolvers = {
     Query: {
