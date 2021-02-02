@@ -1,4 +1,6 @@
 import * as SequelizeDatabase from '../db/setup'
+import SequelizeDB from '../db/setup'
+import Sequelize from 'sequelize'
 
 import * as Types from '../declarations'
 
@@ -49,4 +51,32 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
         // @ts-ignore
         entries: currency.currency_entries,
     }
+}
+
+export const getForMovingAverage = async (
+    periodLength: number,
+    samples: number,
+    currencyId: number,
+): Promise<number[]> => {
+    // frequency - the length of each period
+    // eg 30 minutes would be 1800 (seconds)
+    // offset = current minutes % period length
+    const dateNow = new Date()
+    const currentMinutes = dateNow.getMinutes()
+    const periodLengthSeconds = periodLength * 60
+    const offSetSeconds = (currentMinutes % periodLength) * 60
+    const sampleSpan = periodLength * samples
+
+    const query = `
+    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, currency.symbol, currency_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN currency_entry on log_entry.id = currency_entry.log_entry_id join currency on currency_entry.currency_id = currency.id WHERE currency.id = '${currencyId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
+    `
+
+    console.log(query)
+
+    // @ts-ignore
+    const result = await SequelizeDB.query(query, { type: Sequelize.QueryTypes.SELECT })
+
+    // console.log(result)
+    // @ts-ignore
+    return result.map((row) => parseFloat(row.price_BTC))
 }

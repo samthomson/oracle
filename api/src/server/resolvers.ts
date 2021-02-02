@@ -5,27 +5,33 @@ import * as DBUtil from '../util/SequelizeDB'
 
 // }
 
-export const currency = async (parent: any, args: any, context: any, info: any) => {
+const calculateAverage = (list) => list.reduce((prev, curr) => prev + curr) / list.length
+
+export const getCurrency = async (parent: any, args: any, context: any, info: any) => {
     const {
         input: { nomicsId, symbol },
     } = args
 
-    let currrency = undefined
+    let currency = undefined
 
     if (nomicsId) {
-        currrency = await DBUtil.getCurrency({ nomicsId })
+        currency = await DBUtil.getCurrency({ nomicsId })
     }
     if (symbol) {
-        currrency = await DBUtil.getCurrency({ symbol })
+        currency = await DBUtil.getCurrency({ symbol })
     }
 
     return {
-        ...currrency,
-        movingAverage: (parent, args, context, info) => {
+        ...currency,
+        async movingAverage(parent, args, context, info) {
             const {
-                movingAverageInput: { period, frequency },
+                movingAverageInput: { periodLength, samples },
             } = parent
-            return period * frequency
+
+            const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
+            const average = prices.length > 0 ? calculateAverage(prices) : undefined
+            // console.log(average)
+            return average
         },
     }
 }
