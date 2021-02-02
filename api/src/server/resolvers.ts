@@ -29,8 +29,7 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
             } = parent
 
             const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
-            const average = prices.length > 0 ? calculateAverage(prices) : undefined
-            // console.log(average)
+            const average = prices.length > 0 ? calculateAverage(prices) : null
             return average
         },
     }
