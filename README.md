@@ -31,6 +31,7 @@ phpmyadmin: `//localhost:3100`
 - crunch MAs on the fly
 - add logging for errors
 - download logs script
+- make a month view of number of currencies pulled per day (would be candlestick for min-max)
 
 maybe later:
 - replace sequelize with TypeORM
