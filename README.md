@@ -23,7 +23,6 @@ phpmyadmin: `//localhost:3100`
 
 ## todo
 
-- find a faster watch script
 - expose gql endpoint
 	- moving average for a single currency
 	- moving average per multiple currency
