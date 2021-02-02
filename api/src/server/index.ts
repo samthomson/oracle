@@ -1,6 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server'
 import * as Resolvers from './resolvers'
-import { currency } from './resolvers'
 import * as Types from '../declarations'
 import * as DB from '../db/setup'
 
@@ -25,8 +24,8 @@ const typeDefs = gql`
     }
 
     input MovingAverageInput {
-        period: Int
-        frequency: Int
+        periodLength: Int
+        samples: Int
     }
 
     # The "Query" type is special: it lists all of the available queries that
@@ -40,7 +39,7 @@ const typeDefs = gql`
 
 const resolvers = {
     Query: {
-        currency,
+        currency: Resolvers.getCurrency,
     },
 }
 
