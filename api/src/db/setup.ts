@@ -78,7 +78,8 @@ export const CurrencyEntry = database.define(
 export const ensureDBSynced = async () => {
     await database.sync()
     Currency.hasMany(CurrencyEntry)
-    LogEntry.hasMany(CurrencyEntry)
+    // LogEntry.hasMany(CurrencyEntry)
+    CurrencyEntry.belongsTo(LogEntry)
 }
 
 export const connect = async () => {
