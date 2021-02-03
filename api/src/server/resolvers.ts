@@ -32,5 +32,22 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
             const average = prices.length > 0 ? calculateAverage(prices) : null
             return average
         },
+        async latestEntry(parent, args, context, info) {
+            const [latestCurrencyEntry] = currency.entries
+
+            if (!latestCurrencyEntry) {
+                return null
+            } else {
+                const {
+                    priceBTC,
+                    log_entry: { createdAt: timeStamp },
+                } = latestCurrencyEntry
+
+                return {
+                    timeStamp: timeStamp.toISOString(),
+                    priceBTC,
+                }
+            }
+        },
     }
 }

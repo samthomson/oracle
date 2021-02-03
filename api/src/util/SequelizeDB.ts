@@ -43,7 +43,16 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
 
     const currency = await SequelizeDatabase.Currency.findOne({
         where: whereQuery,
-        include: SequelizeDatabase.CurrencyEntry,
+        // include: SequelizeDatabase.CurrencyEntry,
+        include: [
+            {
+                model: SequelizeDatabase.CurrencyEntry,
+                // @ts-ignore
+                include: SequelizeDatabase.LogEntry,
+                limit: 1,
+                order: [[SequelizeDatabase.LogEntry, 'created_at', 'DESC']],
+            },
+        ],
     })
 
     return {
@@ -71,7 +80,7 @@ export const getForMovingAverage = async (
     select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, currency.symbol, currency_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN currency_entry on log_entry.id = currency_entry.log_entry_id join currency on currency_entry.currency_id = currency.id WHERE currency.id = '${currencyId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
     `
 
-    console.log(query)
+    // console.log(query)
 
     // @ts-ignore
     const result = await SequelizeDB.query(query, { type: Sequelize.QueryTypes.SELECT })

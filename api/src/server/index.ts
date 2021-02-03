@@ -8,15 +8,21 @@ const typeDefs = gql`
         nomicsId: String
         name: String
         symbol: String
-        entries: [CurrencyEntry]
+        # entries: [CurrencyEntry]
         movingAverage(movingAverageInput: MovingAverageInput): Float
+        latestEntry: PriceEntry
     }
 
-    type CurrencyEntry {
-        currencyId: String
-        logEntryId: String
+    type PriceEntry {
+        timeStamp: String
         priceBTC: String
     }
+
+    # type CurrencyEntry {
+    #     currencyId: String
+    #     logEntryId: String
+    #     priceBTC: String
+    # }
 
     input CurrencyQueryInput {
         symbol: String
