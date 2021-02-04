@@ -84,7 +84,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
             latestEntry: {
                 priceBTC: currencyEntry.priceBTC,
                 // @ts-ignore
-                timeStamp: logEntry.createdAt,
+                timeStamp: logEntry.createdAt.toISOString(),
             },
         }
     })
