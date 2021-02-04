@@ -79,6 +79,7 @@ export const ensureDBSynced = async () => {
     await database.sync()
     Currency.hasMany(CurrencyEntry)
     LogEntry.hasMany(CurrencyEntry)
+    CurrencyEntry.belongsTo(LogEntry)
     CurrencyEntry.belongsTo(Currency)
 }
 
