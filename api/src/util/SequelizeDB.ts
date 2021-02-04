@@ -49,7 +49,7 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
                 model: SequelizeDatabase.CurrencyEntry,
                 // @ts-ignore
                 include: SequelizeDatabase.LogEntry,
-                // limit: 1,
+                limit: 1,
                 order: [[SequelizeDatabase.LogEntry, 'created_at', 'DESC']],
             },
         ],
