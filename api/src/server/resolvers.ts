@@ -3,10 +3,13 @@ import * as DBUtil from '../util/SequelizeDB'
 
 const calculateAverage = (list) => list.reduce((prev, curr) => prev + curr) / list.length
 
-export const getCurrencies = async () => {
+export const getCurrencies = async (parent: any, args: any, context: any, info: any) => {
     const rawCurrencies = await DBUtil.getCurrencies()
     return {
-        items: rawCurrencies,
+        items: rawCurrencies.map((currency) => ({
+            ...currency,
+            movingAverage: async (parent) => await resolveMovingAverage(parent, currency),
+        })),
         pageInfo: {
             totalItems: rawCurrencies.length,
         },
@@ -29,31 +32,36 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
 
     return {
         ...currency,
-        async movingAverage(parent, args, context, info) {
-            const {
-                movingAverageInput: { periodLength, samples },
-            } = parent
+        movingAverage: (parent) => resolveMovingAverage(parent, currency),
+        latestEntry: () => resolveLatestPrice(currency),
+    }
+}
 
-            const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
-            const average = prices.length > 0 ? calculateAverage(prices) : null
-            return average
-        },
-        async latestEntry(parent, args, context, info) {
-            const [latestCurrencyEntry] = currency.entries
+const resolveMovingAverage = async (parent, currency) => {
+    const {
+        movingAverageInput: { periodLength, samples },
+    } = parent
 
-            if (!latestCurrencyEntry) {
-                return null
-            } else {
-                const {
-                    priceBTC,
-                    log_entry: { createdAt: timeStamp },
-                } = latestCurrencyEntry
+    // @ts-ignore
+    const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
+    const average = prices.length > 0 ? calculateAverage(prices) : null
+    return average
+}
 
-                return {
-                    timeStamp: timeStamp.toISOString(),
-                    priceBTC,
-                }
-            }
-        },
+const resolveLatestPrice = async (currency) => {
+    const [latestCurrencyEntry] = currency.entries
+
+    if (!latestCurrencyEntry) {
+        return null
+    } else {
+        const {
+            priceBTC,
+            log_entry: { createdAt: timeStamp },
+        } = latestCurrencyEntry
+
+        return {
+            timeStamp: timeStamp.toISOString(),
+            priceBTC: priceBTC,
+        }
     }
 }

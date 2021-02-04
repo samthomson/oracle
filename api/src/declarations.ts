@@ -91,6 +91,7 @@ export type LatestPrice = {
 }
 
 export type CurrenciesQueryResult = {
+    id: number
     nomicsId: string
     symbol: string
     latestPrice: LatestPrice

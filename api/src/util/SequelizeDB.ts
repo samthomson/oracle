@@ -70,6 +70,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
                 model: SequelizeDatabase.CurrencyEntry,
                 // @ts-ignore
                 include: SequelizeDatabase.Currency,
+                limit: 20, // todo: replace this with pagination logic
             },
         ],
         order: [['created_at', 'DESC']],
@@ -78,6 +79,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
     // @ts-ignore
     return logEntry.currency_entries.map((currencyEntry) => {
         return {
+            id: currencyEntry.currencyId,
             name: currencyEntry.currency.name,
             symbol: currencyEntry.currency.symbol,
             nomicsId: currencyEntry.currency.nomicsId,
@@ -108,12 +110,9 @@ export const getForMovingAverage = async (
     select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, currency.symbol, currency_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN currency_entry on log_entry.id = currency_entry.log_entry_id join currency on currency_entry.currency_id = currency.id WHERE currency.id = '${currencyId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
     `
 
-    // console.log(query)
-
     // @ts-ignore
     const result = await SequelizeDB.query(query, { type: Sequelize.QueryTypes.SELECT })
 
-    // console.log(result)
     // @ts-ignore
     return result.map((row) => parseFloat(row.price_BTC))
 }
