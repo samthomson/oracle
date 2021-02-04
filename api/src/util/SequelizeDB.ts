@@ -49,7 +49,7 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
                 model: SequelizeDatabase.CurrencyEntry,
                 // @ts-ignore
                 include: SequelizeDatabase.LogEntry,
-                limit: 1,
+                // limit: 1,
                 order: [[SequelizeDatabase.LogEntry, 'created_at', 'DESC']],
             },
         ],
@@ -60,6 +60,34 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
         // @ts-ignore
         entries: currency.currency_entries,
     }
+}
+
+export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> => {
+    // get latest log entry and associated currency prices
+    const logEntry = await SequelizeDatabase.LogEntry.findOne({
+        include: [
+            {
+                model: SequelizeDatabase.CurrencyEntry,
+                // @ts-ignore
+                include: SequelizeDatabase.Currency,
+            },
+        ],
+        order: [['created_at', 'DESC']],
+    })
+
+    // @ts-ignore
+    return logEntry.currency_entries.map((currencyEntry) => {
+        return {
+            name: currencyEntry.currency.name,
+            symbol: currencyEntry.currency.symbol,
+            nomicsId: currencyEntry.currency.nomicsId,
+            latestEntry: {
+                priceBTC: currencyEntry.priceBTC,
+                // @ts-ignore
+                timeStamp: logEntry.createdAt,
+            },
+        }
+    })
 }
 
 export const getForMovingAverage = async (

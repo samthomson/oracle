@@ -84,3 +84,14 @@ export type Currency = {
     name: string
     symbol: string
 }
+
+export type LatestPrice = {
+    timeStamp: string
+    priceBTC: string
+}
+
+export type CurrenciesQueryResult = {
+    nomicsId: string
+    symbol: string
+    latestPrice: LatestPrice
+}

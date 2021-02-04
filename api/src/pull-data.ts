@@ -37,40 +37,11 @@ const testRelations = async () => {
     // get currency entries for 'ABBC'
     await SequelizeDatabase.ensureDBSynced()
 
-    const abbc = await SequelizeDatabase.Currency.findOne({
-        where: { nomicsId: 'ABBC' },
-        include: [
-            {
-                model: SequelizeDatabase.CurrencyEntry,
-                // @ts-ignore
-                include: SequelizeDatabase.LogEntry,
-                limit: 1,
-                order: [[SequelizeDatabase.LogEntry, 'created_at', 'DESC']],
-            },
-        ],
-    })
+    const currencies = await DBUtil.getCurrencies()
 
     // @ts-ignore
-    console.log('entries', abbc.currency_entries.length)
-    // @ts-ignore
-    console.log('entry 0 log_entry', abbc.currency_entries[0].log_entry)
-    // @ts-ignore
-    console.log('entry 0 currency_entry price', abbc.currency_entries[0].priceBTC)
-
-    /*
-    const latestLogEntry = await SequelizeDatabaseModels.LogEntry.findOne({
-        include: SequelizeDatabaseModels.CurrencyEntry,
-    })
-
-    console.log(abbc)
-    console.log(abbc.currency_entries.length, 'entries for this currency')
-    console.log(latestLogEntry.currency_entries.length, 'entries for this log entry')
-    // console.log(latestLogEntry.currency_entries.length, 'entries for this currency')
-
-    // const { entries } = abbc
-
-    // console.log(entries.length)
-    */
+    // console.log(currencies.length)
+    // console.log(currencies[0])
 }
 
 // console.log('\ndata test stub')
