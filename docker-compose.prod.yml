@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
     command: 
-      [sh, -c, "yarn --silent && npm run forever && tail -F anything"]
+      [sh, -c, "yarn run prod-start & npm run forever && tail -F anything"]
     environment:
       - NOMICS_API_KEY=${NOMICS_API_KEY}   
       - MYSQL_HOST=mysql
@@ -16,7 +16,7 @@ services:
       - NODE_ENV=development
       - LOG_LEVEL=info
     ports:
-      - "3100:3100"
+      - "3800:4000"
     volumes:
       - ./api:/api
     depends_on:
