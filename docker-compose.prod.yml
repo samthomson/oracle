@@ -16,7 +16,6 @@ services:
       - NODE_ENV=development
       - LOG_LEVEL=info
     ports:
-      - "3800:4000"
       - "80:4000"
       - "443:4000"
     volumes:
