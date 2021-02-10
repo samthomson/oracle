@@ -17,6 +17,9 @@ services:
       - LOG_LEVEL=info
     ports:
       - "3800:4000"
+      - "80:4000"
+    expose:
+      - "4000"
     volumes:
       - ./api:/api
       - /logs/api:/api/logs
