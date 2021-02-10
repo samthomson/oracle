@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize'
+import Logger from '../services/logging'
 
 const dbConfig = {
     host: process.env.MYSQL_HOST,
@@ -6,7 +7,12 @@ const dbConfig = {
     username: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     dialect: 'mysql',
-    logging: false,
+    logging: (message: string, data: Record<string, unknown>): void => {
+        Logger.silly(message, {
+            type: 'sequelize',
+            data,
+        })
+    },
 }
 
 // @ts-ignore
