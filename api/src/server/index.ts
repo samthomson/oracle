@@ -2,6 +2,7 @@ import { ApolloServer, gql } from 'apollo-server'
 import * as Resolvers from './resolvers'
 import * as Types from '../declarations'
 import * as DB from '../db/setup'
+import Logger from '../services/logging'
 
 const typeDefs = gql`
     type Currency {
@@ -68,5 +69,5 @@ DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
 server.listen().then(({ url }) => {
-    console.log(`\nServer ready at ${url}\n`)
+    Logger.info(`\nServer ready at ${url}\n`)
 })
