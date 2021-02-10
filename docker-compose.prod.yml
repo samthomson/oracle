@@ -23,7 +23,7 @@ services:
       - "4000"
     volumes:
       - ./api:/api
-      - /logs/api:/api/logs
+      - /logs/api:/serverlogs
     depends_on:
       - mysql
 
