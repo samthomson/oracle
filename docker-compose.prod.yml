@@ -19,8 +19,6 @@ services:
       - "3800:4000"
       - "80:4000"
       - "443:4000"
-    expose:
-      - "4000"
     volumes:
       - ./api:/api
       - /logs/api:/serverlogs
