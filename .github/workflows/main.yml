@@ -10,10 +10,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       
-      - name: Install deps
-		run: yarn
-		working-directory: ./api
+	  - name: Install deps
+        run: yarn
+        working-directory: ./api
       
       - name: Server starts
         run: yarn run start-server
-		working-directory: ./api
+        working-directory: ./api
