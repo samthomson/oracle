@@ -14,4 +14,4 @@ jobs:
         run: cd ./api && yarn
       
       - name: Server starts
-        run: yarn run start-server
+        run: cd ./api && yarn run start-server
