@@ -68,6 +68,6 @@ const server = new ApolloServer({ typeDefs, resolvers })
 DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
-serfever.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
     Logger.info(`\nServer ready at ${url}\n`)
 })
