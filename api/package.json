@@ -11,6 +11,7 @@
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts",
+    "build": "tsc",
     "start-server": "ts-node src/server/index.ts",
     "prod-start": "yarn --silent && yarn run start-server",
     "watch": "tsc-watch --onSuccess \"yarn run start-server\""
