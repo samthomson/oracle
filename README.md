@@ -5,6 +5,10 @@
 - call [nomics](https://nomics.com/docs/) every x (five) minutes to get all currency prices, store in db.
 - expose gql api containing moving averages. These can be calculated on the fly by looking at the pricing data in db.
 
+### nomics mappings
+
+Find the currency in the db by doing a LIKE query on `currency.name`. Look at prices of returned records and pick one matching market data (bittrex/binance). Then take it's `nomicsId` which can be used in a symbol map.
+
 ## 2.0 set up
 
 ### initial setup
