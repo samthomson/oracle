@@ -37,7 +37,7 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
     }
 }
 
-const resolveMovingAverage = async (parent, currency) => {
+const resolveMovingAverage = async (parent, currency): Promise<number | null> => {
     const {
         movingAverageInput: { periodLength, samples },
     } = parent
