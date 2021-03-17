@@ -10,7 +10,7 @@ const commonLoggingOptions = {
         format.timestamp({
             format: 'YYYY-MM-DD HH:mm:ss',
         }),
-        format.json(),
+        format.simple(),
     ),
     maxsize: 5242880, // 5MB
     maxFiles: 5,
