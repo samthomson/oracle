@@ -74,5 +74,5 @@ DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
-    Logger.info(`\nServer ready at ${url}\n`)
+    Logger.info(`Server ready at ${url}`)
 })
