@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import * as Types from '../declarations'
 import Logger from './logging'
+import moment from 'moment'
 
 type NomicsListingPage = {
     listings: Types.NomicsListing[]
@@ -13,12 +14,17 @@ export const getValues = async (): Promise<Types.NomicsListing[]> => {
         let page = 1
         let hasMore = true
 
+        const startTime = moment()
         while (hasMore) {
             const { listings, totalItems } = await getPageOfValues(page)
             hasMore = Math.ceil(totalItems / 100) > page
             allListings = [...allListings, ...listings]
             page++
         }
+        const endTime = moment()
+
+        const milliseconds = endTime.diff(startTime)
+        Logger.info(`time spent assembling nomics data: ${milliseconds.toLocaleString()} ms`)
 
         return allListings
     } catch (err) {

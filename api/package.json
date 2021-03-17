@@ -22,6 +22,7 @@
     "cron": "^1.8.2",
     "forever": "^3.0.4",
     "graphql": "^15.5.0",
+    "moment": "^2.29.1",
     "mysql2": "^2.2.5",
     "node-fetch": "^2.6.1",
     "sequelize": "^6.5.0",
