@@ -1,5 +1,6 @@
 import * as Types from '../declarations'
 import * as DBUtil from '../util/SequelizeDB'
+import * as NomicsData from '../services/nomics-data'
 
 const calculateAverage = (list) => list.reduce((prev, curr) => prev + curr) / list.length
 
@@ -68,6 +69,7 @@ const resolveLatestPrice = async (currency) => {
 
 export const debug = async () => {
     const output = 'result'
+    await NomicsData.getValues()
     return {
         output,
     }
