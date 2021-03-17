@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import * as Types from '../declarations'
+import Logger from './logging'
 
 type NomicsListingPage = {
     listings: Types.NomicsListing[]
@@ -21,7 +22,7 @@ export const getValues = async (): Promise<Types.NomicsListing[]> => {
 
         return allListings
     } catch (err) {
-        console.error(err)
+        Logger.error('error assembling nomics data', err)
     }
 }
 
