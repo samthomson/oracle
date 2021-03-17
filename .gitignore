@@ -1,5 +1,6 @@
 .env
 api/node_modules
+api/node_modules/.yarn-integrity
 api/yarn-error.log
 dist
 db-backups

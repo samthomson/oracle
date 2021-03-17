@@ -31,7 +31,9 @@ const typeDefs = gql`
     }
 
     input MovingAverageInput {
+        "How many seconds apart data points used should be spaced."
         periodLength: Int
+        "The number of data points to derive an average from."
         samples: Int
     }
 
@@ -44,12 +46,14 @@ const typeDefs = gql`
         pageInfo: PaginationInfo
     }
 
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
+    type DebugResult {
+        output: String
+    }
+
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
+        debug: DebugResult
     }
 `
 
@@ -57,6 +61,7 @@ const resolvers = {
     Query: {
         currency: Resolvers.getCurrency,
         currencies: Resolvers.getCurrencies,
+        debug: Resolvers.debug,
     },
 }
 
@@ -69,5 +74,5 @@ DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
-    Logger.info(`\nServer ready at ${url}\n`)
+    Logger.info(`Server ready at ${url}`)
 })

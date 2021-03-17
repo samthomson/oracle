@@ -1,17 +1,16 @@
 import * as appRoot from 'app-root-path'
-import { createLogger, format, transports } from 'winston'
+import * as winston from 'winston'
 import 'winston-daily-rotate-file'
+
+const myFormat = winston.format.printf(({ timestamp, level, message, ...other }) => {
+    return `${timestamp} ${level} ${String(message)} ${other ? JSON.stringify(other) : ''}`
+})
 
 // define the custom settings for each transport (file, console)
 const commonLoggingOptions = {
     handleExceptions: true,
     handleRejections: true, // doesn't work
-    format: format.combine(
-        format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
-        }),
-        format.json(),
-    ),
+    format: winston.format.combine(winston.format.timestamp(), winston.format.splat(), myFormat),
     maxsize: 5242880, // 5MB
     maxFiles: 5,
     colorize: true,
@@ -28,24 +27,24 @@ const options = {
         level: process.env.LOG_LEVEL || 'silly',
         handleExceptions: true,
         handleRejections: true,
-        format: format.combine(format.colorize(), format.simple()),
+        format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
         maxsize: 5242880, // 5MB
         maxFiles: 5,
     },
 }
 
 // instantiate a new Winston Logger with the settings defined above
-const logger = createLogger({
+const logger = winston.createLogger({
     transports: [
         // output logs to disk
-        new transports.DailyRotateFile(options.fileAll),
+        new winston.transports.DailyRotateFile(options.fileAll),
     ],
     exitOnError: false, // do not exit on handled exceptions
 })
 
 if (process.env.NODE_ENV === 'development') {
     // output to the console too
-    logger.add(new transports.Console(options.console))
+    logger.add(new winston.transports.Console(options.console))
 }
 
 // create a stream object with a 'write' function that will be used by `morgan`

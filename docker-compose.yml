@@ -16,6 +16,7 @@ services:
       - LOG_LEVEL=info
     ports:
       - "3800:4000"
+      - "9229:9229"
     volumes:
       - ./api:/api
     depends_on:
