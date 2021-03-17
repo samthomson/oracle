@@ -44,12 +44,17 @@ const typeDefs = gql`
         pageInfo: PaginationInfo
     }
 
+    type DebugResult {
+        output: String
+    }
+
     # The "Query" type is special: it lists all of the available queries that
     # clients can execute, along with the return type for each. In this
     # case, the "books" query returns an array of zero or more Books (defined above).
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
+        debug: DebugResult
     }
 `
 
@@ -57,6 +62,7 @@ const resolvers = {
     Query: {
         currency: Resolvers.getCurrency,
         currencies: Resolvers.getCurrencies,
+        debug: Resolvers.debug,
     },
 }
 

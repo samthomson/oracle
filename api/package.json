@@ -12,7 +12,7 @@
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts",
     "build": "tsc",
-    "start-server": "ts-node src/server/index.ts",
+    "start-server": "node --inspect=0.0.0.0:9229 -r ts-node/register src/server/index.ts",
     "prod-start": "yarn --silent && yarn run start-server",
     "watch": "tsc-watch --onSuccess \"yarn run start-server\""
   },

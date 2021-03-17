@@ -65,3 +65,10 @@ const resolveLatestPrice = async (currency) => {
         }
     }
 }
+
+export const debug = async () => {
+    const output = 'result'
+    return {
+        output,
+    }
+}
