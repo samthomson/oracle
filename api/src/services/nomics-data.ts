@@ -29,6 +29,7 @@ export const getValues = async (): Promise<Types.NomicsListing[]> => {
         return allListings
     } catch (err) {
         Logger.error('error assembling nomics data', err)
+        return []
     }
 }
 
