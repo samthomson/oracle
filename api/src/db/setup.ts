@@ -90,7 +90,7 @@ export const ensureDBSynced = async () => {
 }
 
 export const connect = async () => {
-    await database.authenticate().catch(() => console.error('Could not connect to database!'))
+    await database.authenticate().catch(() => Logger.error('Could not connect to database!'))
 }
 
 export default database

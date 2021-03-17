@@ -32,7 +32,7 @@ const getPageOfValues = async (page: number): Promise<NomicsListingPage> => {
     )
 
     if (response.status !== 200) {
-        console.error(response)
+        Logger.error('getPageOfValues error', response)
         throw new Error('Error fetching Nomics data')
     }
     const totalItems: number = parseInt(response.headers.get('X-Pagination-Total-Items'))
