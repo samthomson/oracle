@@ -31,7 +31,9 @@ const typeDefs = gql`
     }
 
     input MovingAverageInput {
+        "How many seconds apart data points used should be spaced."
         periodLength: Int
+        "The number of data points to derive an average from."
         samples: Int
     }
 
@@ -48,9 +50,6 @@ const typeDefs = gql`
         output: String
     }
 
-    # The "Query" type is special: it lists all of the available queries that
-    # clients can execute, along with the return type for each. In this
-    # case, the "books" query returns an array of zero or more Books (defined above).
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
