@@ -78,7 +78,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
     })
 
     // @ts-ignore
-    return logEntry.currency_entries.map((currencyEntry) => {
+    return (logEntry?.currency_entries ?? []).map((currencyEntry) => {
         return {
             id: currencyEntry.currencyId,
             name: currencyEntry.currency.name,
