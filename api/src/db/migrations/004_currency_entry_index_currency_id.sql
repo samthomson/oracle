@@ -1,0 +1,9 @@
+
+CREATE TABLE IF NOT EXISTS `currency_entry` (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `currency_id` SMALLINT UNSIGNED DEFAULT NULL,
+  `log_entry_id` int(10) UNSIGNED DEFAULT NULL,
+  `price_BTC` decimal(32,12) DEFAULT NULL,
+
+ PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3;

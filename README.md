@@ -37,6 +37,12 @@ select periods.period, periods.created_at periodCreatedAt, log_entry.created_at 
 SELECT latestLogEntry.logId, latestLogEntry.logDate, currency.symbol, currency_entry.price_BTC FROM (SELECT log_entry.id AS logId, log_entry.created_at AS logDate FROM log_entry ORDER BY created_at DESC LIMIT 1) latestLogEntry JOIN currency_entry ON latestLogEntry.logId = currency_entry.log_entry_id JOIN currency ON currency_entry.currency_id = currency.id LIMIT 5000
 ```
 
+### 3.2 migrations
+
+run `yarn run migrate` from the `api` container.
+
+test migration SQL here https://www.eversql.com/sql-syntax-check-validator/
+
 ## 4.0 deploy
 
 ### 4.1 initial deploy
