@@ -1,10 +1,11 @@
 import { getValues } from './services/nomics-data'
 import * as DBUtil from './util/SequelizeDB'
-import * as SequelizeDatabase from './db/setup'
+import * as SequelizeDatabase from './db/connection'
 
 export const pullData = async () => {
     // ensure tables exist
-    await SequelizeDatabase.ensureDBSynced()
+    // redundant now using scalp-bot style connections?
+    // await SequelizeDatabase.ensureDBSynced()
 
     // pull all currency data
     const nomicsCurrencies = await getValues()
@@ -35,7 +36,8 @@ export const pullData = async () => {
 
 const testRelations = async () => {
     // get currency entries for 'ABBC'
-    await SequelizeDatabase.ensureDBSynced()
+    // redundant now using scalp-bot style connections?
+    // await SequelizeDatabase.ensureDBSynced()
 
     const currencies = await DBUtil.getCurrencies()
 
