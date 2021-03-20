@@ -6,6 +6,16 @@ export type NomicsListing = {
     price: number
 }
 
+export type DraftMarket = {
+    id: string
+    sourceId: number
+    name: string
+    // currency: string
+    symbol: string
+    quote: string
+    price: number
+}
+
 // "id": "BTC",
 // "currency": "BTC",
 // "symbol": "BTC",
@@ -95,4 +105,12 @@ export type CurrenciesQueryResult = {
     nomicsId: string
     symbol: string
     latestPrice: LatestPrice
+}
+
+export type BittrexListing = {
+    id: string
+    name: string
+    currency: string
+    symbol: string
+    price: number
 }

@@ -13,6 +13,10 @@ export const LogEntry = Database.define(
 			type: Sequelize.SMALLINT.UNSIGNED,
 			allowNull: true,
 		},
+		source: {
+			type: Sequelize.SMALLINT.UNSIGNED,
+			allowNull: false,
+		},
 	},
 	{
 		timestamps: true,
@@ -22,20 +26,22 @@ export const LogEntry = Database.define(
 	},
 )
 
-export const Currency = Database.define(
-	'currency',
+export const Market = Database.define(
+	'market',
 	{
 		id: {
 			type: Sequelize.INTEGER.UNSIGNED,
 			autoIncrement: true,
 			primaryKey: true,
 		},
+		sourceId: Sequelize.SMALLINT.UNSIGNED,
 		nomicsId: {
 			type: Sequelize.STRING(64),
 			unique: true,
 		},
 		name: Sequelize.STRING(128),
 		symbol: Sequelize.STRING(32),
+		quote: Sequelize.STRING(8),
 	},
 	{
 		timestamps: true,
@@ -44,8 +50,8 @@ export const Currency = Database.define(
 	},
 )
 
-export const CurrencyEntry = Database.define(
-	'currency_entry',
+export const MarketEntry = Database.define(
+	'market_entry',
 	{
 		id: {
 			type: Sequelize.INTEGER.UNSIGNED,
@@ -64,7 +70,7 @@ export const CurrencyEntry = Database.define(
 	},
 )
 
-Currency.hasMany(CurrencyEntry)
-LogEntry.hasMany(CurrencyEntry)
-CurrencyEntry.belongsTo(LogEntry)
-CurrencyEntry.belongsTo(Currency)
+Market.hasMany(MarketEntry)
+LogEntry.hasMany(MarketEntry)
+MarketEntry.belongsTo(LogEntry)
+MarketEntry.belongsTo(Market)

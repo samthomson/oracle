@@ -5,26 +5,32 @@ import * as Models from '../db/models'
 
 import * as Types from '../declarations'
 
-export const createLogEntry: any = () => Models.LogEntry.create()
+export const createLogEntry: any = (source: number) =>
+    Models.LogEntry.create({
+        source,
+    })
 
-export const ensureCurrencyExists: any = async (currency: Types.NomicsListing) => {
-    const [record, created] = await Models.Currency.findOrCreate({
+export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
+    const { symbol, quote, name, sourceId } = currency
+    const [record, created] = await Models.Market.findOrCreate({
         where: {
             nomicsId: currency.id,
         },
         defaults: {
-            nomicsId: currency.id,
-            symbol: currency.symbol,
-            name: currency.name,
+            nomicsId: currency?.id ?? null,
+            symbol,
+            quote,
+            name,
+            sourceId,
         },
     })
     return record.get({ plain: true })
 }
 
-export const createCurrencyEntry: any = (currencyId: number, logEntryId: number, currency: Types.NomicsListing) => {
-    const { price } = currency
+export const createCurrencyEntry: any = (currencyId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
+    const { price } = draftMarket
 
-    return Models.CurrencyEntry.create({
+    return Models.MarketEntry.create({
         currencyId,
         logEntryId,
         priceBTC: price,
@@ -42,12 +48,12 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
         return undefined
     }
 
-    const currency = await Models.Currency.findOne({
+    const currency = await Models.Market.findOne({
         where: whereQuery,
         // include: SequelizeDatabase.CurrencyEntry,
         include: [
             {
-                model: Models.CurrencyEntry,
+                model: Models.MarketEntry,
                 // @ts-ignore
                 include: Models.LogEntry,
                 limit: 1,
@@ -68,7 +74,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
     const logEntry = await Models.LogEntry.findOne({
         include: [
             {
-                model: Models.CurrencyEntry,
+                model: Models.MarketEntry,
                 // @ts-ignore
                 include: Models.Currency,
                 limit: 20, // todo: replace this with pagination logic

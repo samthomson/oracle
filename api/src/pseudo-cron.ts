@@ -1,7 +1,7 @@
 import { CronJob } from 'cron'
-import { pullData } from './pull-data'
+import * as DataImporter from './util/data-importer'
 
 // every fifth minute
 const cronFrequency = '*/5 * * * *'
 
-new CronJob(cronFrequency, () => pullData(), undefined, true, 'Europe/London')
+new CronJob(cronFrequency, () => DataImporter.pullNomicsData(), undefined, true, 'Europe/London')
