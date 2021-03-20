@@ -6,7 +6,9 @@ services:
       dockerfile: ./api/Dockerfile
     command: yarn run watch
     environment:
-      - NOMICS_API_KEY=${NOMICS_API_KEY}   
+      - NOMICS_API_KEY=${NOMICS_API_KEY} 
+      - BITTREX_API_KEY=${BITTREX_API_KEY}
+      - BITTREX_API_SECRET=${BITTREX_API_SECRET}  
       - MYSQL_HOST=${MYSQL_HOST}
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_DATABASE_TESTING=${MYSQL_DATABASE_TESTING}
