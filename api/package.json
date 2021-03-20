@@ -14,8 +14,9 @@
     "build": "tsc",
     "prod-start-server": "node -r ts-node/register src/server/index.ts",
     "start-server": "node --inspect=0.0.0.0:9229 -r ts-node/register src/server/index.ts",
-    "prod-start": "yarn --silent && yarn run prod-start-server",
-    "watch": "tsc-watch --onSuccess \"yarn run start-server\""
+    "prod-start": "yarn --silent && yarn run migrate && yarn run prod-start-server",
+    "watch": "tsc-watch --onSuccess \"yarn run start-server\"",
+    "migrate": "ts-node src/db/migrate.ts"
   },
   "dependencies": {
     "apollo-server": "^2.19.2",

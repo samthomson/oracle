@@ -1,7 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server'
 import * as Resolvers from './resolvers'
 import * as Types from '../declarations'
-import * as DB from '../db/setup'
 import Logger from '../services/logging'
 
 const typeDefs = gql`
@@ -70,7 +69,6 @@ const resolvers = {
 const server = new ApolloServer({ typeDefs, resolvers })
 
 // needed so that relations are defined since sequelize is awkward
-DB.ensureDBSynced()
 
 // The `listen` method launches a web server.
 server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
