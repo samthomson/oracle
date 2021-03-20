@@ -50,7 +50,7 @@ const resolveMovingAverage = async (parent, currency): Promise<number | null> =>
 }
 
 const resolveLatestPrice = async (currency) => {
-    const [latestCurrencyEntry] = currency.entries
+    const [latestCurrencyEntry] = currency?.entries ?? []
 
     if (!latestCurrencyEntry) {
         return null

@@ -58,7 +58,7 @@ export const MarketEntry = Database.define(
 			autoIncrement: true,
 			primaryKey: true,
 		},
-		currencyId: Sequelize.SMALLINT.UNSIGNED,
+		marketId: Sequelize.SMALLINT.UNSIGNED,
 		logEntryId: Sequelize.INTEGER.UNSIGNED,
 		priceBTC: { type: Sequelize.DECIMAL(32, 12), field: 'price_BTC' },
 	},
@@ -66,7 +66,7 @@ export const MarketEntry = Database.define(
 		timestamps: false,
 		freezeTableName: true,
 		underscored: true,
-		indexes: [{ fields: ['currency_id'] }, { fields: ['log_entry_id'] }],
+		indexes: [{ fields: ['market_id'] }, { fields: ['log_entry_id'] }],
 	},
 )
 

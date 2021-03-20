@@ -48,7 +48,7 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
         return undefined
     }
 
-    const currency = await Models.Market.findOne({
+    const market = await Models.Market.findOne({
         where: whereQuery,
         // include: SequelizeDatabase.CurrencyEntry,
         include: [
@@ -63,9 +63,9 @@ export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput
     })
 
     return {
-        ...currency.get(),
+        ...market.get(),
         // @ts-ignore
-        entries: currency.currency_entries,
+        entries: market.market_entries,
     }
 }
 
@@ -84,14 +84,14 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
     })
 
     // @ts-ignore
-    return (logEntry?.currency_entries ?? []).map((currencyEntry) => {
+    return (logEntry?.market_entries ?? []).map((marketEntry) => {
         return {
-            id: currencyEntry.currencyId,
-            name: currencyEntry.currency.name,
-            symbol: currencyEntry.currency.symbol,
-            nomicsId: currencyEntry.currency.nomicsId,
+            id: marketEntry.currencyId,
+            name: marketEntry.currency.name,
+            symbol: marketEntry.currency.symbol,
+            nomicsId: marketEntry.currency.nomicsId,
             latestEntry: {
-                priceBTC: currencyEntry.priceBTC,
+                priceBTC: marketEntry.priceBTC,
                 // @ts-ignore
                 timeStamp: logEntry.createdAt.toISOString(),
             },
@@ -102,7 +102,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
 export const getForMovingAverage = async (
     periodLength: number,
     samples: number,
-    currencyId: number,
+    marketId: number,
 ): Promise<number[]> => {
     // frequency - the length of each period
     // eg 30 minutes would be 1800 (seconds)
@@ -114,7 +114,7 @@ export const getForMovingAverage = async (
     const sampleSpan = periodLength * samples
 
     const query = `
-    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, currency.symbol, currency_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN currency_entry on log_entry.id = currency_entry.log_entry_id join currency on currency_entry.currency_id = currency.id WHERE currency.id = '${currencyId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
+    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, market.symbol, market_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN market_entry on log_entry.id = market_entry.log_entry_id join market on market_entry.market_id = market.id WHERE market.id = '${marketId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
     `
 
     // @ts-ignore
