@@ -39,7 +39,7 @@ SELECT latestLogEntry.logId, latestLogEntry.logDate, currency.symbol, currency_e
 
 ### 3.2 migrations
 
-run `yarn run migrate` from the `api` container.
+run `yarn run migrate` from the `api` container. (`docker-compose run api yarn run migrate`)
 
 test migration SQL here https://www.eversql.com/sql-syntax-check-validator/
 
