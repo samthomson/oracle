@@ -48,15 +48,24 @@ export const createCurrencyEntry: any = (marketId: number, logEntryId: number, d
     })
 }
 
-export const getCurrency = async ({ nomicsId, symbol }: Types.CurrencyQueryInput): Promise<Types.Currency> => {
-    let whereQuery = {}
+export const getCurrency = async ({
+    nomicsId,
+    quote,
+    symbol,
+    sourceId,
+}: Types.CurrencyQueryInput): Promise<Types.Currency> => {
+    let whereQuery: any = { sourceId, quote }
+
+    // we need a numeric sourceId and a quote at a minimum
+    if (isNaN(sourceId) || !quote) {
+        return undefined
+    }
 
     if (nomicsId) {
-        whereQuery = { nomicsId }
-    } else if (symbol) {
-        whereQuery = { symbol }
-    } else {
-        return undefined
+        whereQuery = { ...whereQuery, nomicsId }
+    }
+    if (symbol) {
+        whereQuery = { ...whereQuery, symbol }
     }
 
     const market = await Models.Market.findOne({

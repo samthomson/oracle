@@ -94,6 +94,8 @@ export type DraftMarket = {
 export type CurrencyQueryInput = {
     nomicsId?: string
     symbol?: string
+    quote: string
+    sourceId?: ExchangeSource
 }
 
 export type Currency = {
