@@ -5,17 +5,28 @@ import * as Models from '../db/models'
 
 import * as Types from '../declarations'
 
-export const createLogEntry: any = (source: number) =>
+export const createLogEntry: any = (source: Types.ExchangeSource) =>
     Models.LogEntry.create({
         source,
     })
 
 export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
     const { symbol, quote, name, sourceId } = currency
-    const [record, created] = await Models.Market.findOrCreate({
-        where: {
-            nomicsId: currency.id,
-        },
+
+    const whereQuery =
+        sourceId === Types.Constants.Source.Nomics
+            ? {
+                  nomicsId: currency.id,
+                  sourceId: Types.Constants.Source.Nomics,
+              }
+            : {
+                  sourceId,
+                  quote,
+                  symbol,
+              }
+
+    const [record] = await Models.Market.findOrCreate({
+        where: whereQuery,
         defaults: {
             nomicsId: currency?.id ?? null,
             symbol,
@@ -27,11 +38,11 @@ export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
     return record.get({ plain: true })
 }
 
-export const createCurrencyEntry: any = (currencyId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
+export const createCurrencyEntry: any = (marketId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
     const { price } = draftMarket
 
     return Models.MarketEntry.create({
-        currencyId,
+        marketId,
         logEntryId,
         priceBTC: price,
     })
