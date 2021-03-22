@@ -1,0 +1,2 @@
+ALTER TABLE `log_entry`
+ADD column source TINYINT UNSIGNED NOT NULL;

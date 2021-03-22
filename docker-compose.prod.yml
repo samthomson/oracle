@@ -7,7 +7,9 @@ services:
     command: 
       [sh, -c, "yarn run prod-start & npm run forever && tail -F anything"]
     environment:
-      - NOMICS_API_KEY=${NOMICS_API_KEY}   
+      - NOMICS_API_KEY=${NOMICS_API_KEY}
+      - BITTREX_API_KEY=${BITTREX_API_KEY}
+      - BITTREX_API_SECRET=${BITTREX_API_SECRET}  
       - MYSQL_HOST=mysql
       - MYSQL_DATABASE=${DATABASE_NAME}
       - MYSQL_DATABASE_TESTING=${MYSQL_DATABASE_TESTING}

@@ -19,16 +19,18 @@ export const getCurrencies = async (parent: any, args: any, context: any, info: 
 
 export const getCurrency = async (parent: any, args: any, context: any, info: any) => {
     const {
-        input: { nomicsId, symbol },
+        input: { nomicsId, symbol, quote, sourceId: inputSource },
     } = args
 
     let currency = undefined
+    // use provided source or default to nomics
+    const sourceId = inputSource ? inputSource : Types.Constants.Source.Nomics
 
-    if (nomicsId) {
-        currency = await DBUtil.getCurrency({ nomicsId })
+    if (nomicsId || sourceId === Types.Constants.Source.Nomics) {
+        currency = await DBUtil.getCurrency({ sourceId: Types.Constants.Source.Nomics, quote: 'BTC', nomicsId })
     }
     if (symbol) {
-        currency = await DBUtil.getCurrency({ symbol })
+        currency = await DBUtil.getCurrency({ sourceId, quote, symbol })
     }
 
     return {
@@ -50,19 +52,19 @@ const resolveMovingAverage = async (parent, currency): Promise<number | null> =>
 }
 
 const resolveLatestPrice = async (currency) => {
-    const [latestCurrencyEntry] = currency.entries
+    const [latestCurrencyEntry] = currency?.entries ?? []
 
     if (!latestCurrencyEntry) {
         return null
     } else {
         const {
-            priceBTC,
+            priceQuote,
             log_entry: { createdAt: timeStamp },
         } = latestCurrencyEntry
 
         return {
             timeStamp: timeStamp.toISOString(),
-            priceBTC: priceBTC,
+            priceQuote,
         }
     }
 }

@@ -1,3 +1,10 @@
+export namespace Constants {
+    export enum Source {
+        Nomics = 0,
+        Bittrex = 1,
+    }
+}
+
 export type NomicsListing = {
     id: string
     name: string
@@ -74,9 +81,21 @@ export type NomicsListing = {
 //     "market_cap_change_pct": "0.0013"
 // }
 
+export type DraftMarket = {
+    id?: string
+    sourceId: ExchangeSource
+    name: string
+    // currency: string
+    symbol: string
+    quote: string
+    price: number
+}
+
 export type CurrencyQueryInput = {
     nomicsId?: string
     symbol?: string
+    quote: string
+    sourceId?: ExchangeSource
 }
 
 export type Currency = {
@@ -87,7 +106,7 @@ export type Currency = {
 
 export type LatestPrice = {
     timeStamp: string
-    priceBTC: string
+    priceQuote: string
 }
 
 export type CurrenciesQueryResult = {
@@ -96,3 +115,12 @@ export type CurrenciesQueryResult = {
     symbol: string
     latestPrice: LatestPrice
 }
+
+export type BittrexMarketTicker = {
+    symbol: string
+    lastTradeRate: number
+    bidRate: number
+    askRate: number
+}
+
+export type ExchangeSource = Constants.Source
