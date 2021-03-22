@@ -104,7 +104,7 @@ export type Currency = {
 
 export type LatestPrice = {
     timeStamp: string
-    priceBTC: string
+    priceQuote: string
 }
 
 export type CurrenciesQueryResult = {

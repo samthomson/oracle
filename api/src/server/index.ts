@@ -15,13 +15,13 @@ const typeDefs = gql`
 
     type PriceEntry {
         timeStamp: String
-        priceBTC: String
+        priceQuote: String
     }
 
     # type CurrencyEntry {
     #     currencyId: String
     #     logEntryId: String
-    #     priceBTC: String
+    #     priceQuote: String
     # }
 
     input CurrencyQueryInput {

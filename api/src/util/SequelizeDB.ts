@@ -39,12 +39,12 @@ export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
 }
 
 export const createCurrencyEntry: any = (marketId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
-    const { price } = draftMarket
+    const { price: priceQuote } = draftMarket
 
     return Models.MarketEntry.create({
         marketId,
         logEntryId,
-        priceBTC: price,
+        priceQuote,
     })
 }
 
@@ -102,7 +102,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
             symbol: marketEntry.currency.symbol,
             nomicsId: marketEntry.currency.nomicsId,
             latestEntry: {
-                priceBTC: marketEntry.priceBTC,
+                priceQuote: marketEntry.priceQuote,
                 // @ts-ignore
                 timeStamp: logEntry.createdAt.toISOString(),
             },
@@ -125,12 +125,12 @@ export const getForMovingAverage = async (
     const sampleSpan = periodLength * samples
 
     const query = `
-    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, market.symbol, market_entry.price_BTC from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN market_entry on log_entry.id = market_entry.log_entry_id join market on market_entry.market_id = market.id WHERE market.id = '${marketId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
+    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, market.symbol, market_entry.price_quote from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN market_entry on log_entry.id = market_entry.log_entry_id join market on market_entry.market_id = market.id WHERE market.id = '${marketId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
     `
 
     // @ts-ignore
     const result = await SequelizeDB.query(query, { type: Sequelize.QueryTypes.SELECT })
 
     // @ts-ignore
-    return result.map((row) => parseFloat(row.price_BTC))
+    return result.map((row) => parseFloat(row.price_quote))
 }

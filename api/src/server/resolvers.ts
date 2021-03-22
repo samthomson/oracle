@@ -56,13 +56,13 @@ const resolveLatestPrice = async (currency) => {
         return null
     } else {
         const {
-            priceBTC,
+            priceQuote,
             log_entry: { createdAt: timeStamp },
         } = latestCurrencyEntry
 
         return {
             timeStamp: timeStamp.toISOString(),
-            priceBTC: priceBTC,
+            priceQuote,
         }
     }
 }
