@@ -1,3 +1,10 @@
+export namespace Constants {
+    export enum Source {
+        Nomics = 0,
+        Bittrex = 1,
+    }
+}
+
 export type NomicsListing = {
     id: string
     name: string
@@ -76,7 +83,7 @@ export type NomicsListing = {
 
 export type DraftMarket = {
     id?: string
-    sourceId: number
+    sourceId: ExchangeSource
     name: string
     // currency: string
     symbol: string
@@ -113,3 +120,5 @@ export type BittrexMarketTicker = {
     bidRate: number
     askRate: number
 }
+
+export type ExchangeSource = Constants.Source
