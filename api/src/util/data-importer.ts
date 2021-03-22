@@ -3,6 +3,7 @@ import * as NomicsService from '../services/nomics-data'
 import * as BittrexService from '../services/bittrex-data'
 import * as DBUtil from './SequelizeDB'
 import * as HelperUtil from '../util/helper'
+import * as Constants from '../constants'
 // import * as SequelizeDatabase from './db/connection'
 
 export const pullNomicsData = async () => {
@@ -18,7 +19,7 @@ export const pullNomicsData = async () => {
         symbol: cur.symbol,
         price: cur.price,
         quote: 'BTC',
-        sourceId: 0,
+        sourceId: Constants.Source.Nomics,
     }))
 
     // create an initial log entry in the db, so we have an id to relate other models against
@@ -53,7 +54,7 @@ export const pullBittrexData = async () => {
             symbol,
             price: cur.lastTradeRate,
             quote,
-            sourceId: 0,
+            sourceId: Constants.Source.Bittrex,
         }
     })
     console.log(draftMarkets)
