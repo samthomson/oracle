@@ -70,7 +70,29 @@ export const MarketEntry = Database.define(
     },
 )
 
+export const CrunchedMarketData = Database.define(
+    'crunched_market_data',
+    {
+        id: {
+            type: Sequelize.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        marketId: Sequelize.SMALLINT.UNSIGNED,
+        maThirtyMin: { type: Sequelize.DECIMAL(32, 12), field: 'ma_30_min' },
+        maTenHour: { type: Sequelize.DECIMAL(32, 12), field: 'ma_10_hour' },
+        lastUpdated: Sequelize.DATE,
+    },
+    {
+        timestamps: false,
+        freezeTableName: true,
+        underscored: true,
+        indexes: [{ fields: ['market_id'] }],
+    },
+)
+
 Market.hasMany(MarketEntry)
 LogEntry.hasMany(MarketEntry)
 MarketEntry.belongsTo(LogEntry)
 MarketEntry.belongsTo(Market)
+Market.hasOne(CrunchedMarketData)
