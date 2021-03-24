@@ -8,6 +8,7 @@
   "scripts": {
     "run-nomics-once": "ts-node src/run-nomics-once.ts",
     "run-bittrex-once": "ts-node src/run-bittrex-once.ts",
+    "crunch": "ts-node src/crunch-data.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts",
