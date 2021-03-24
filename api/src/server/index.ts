@@ -33,7 +33,7 @@ const typeDefs = gql`
     }
 
     input MovingAverageInput {
-        "How many seconds apart data points used should be spaced."
+        "How many minutes apart data points used should be spaced."
         periodLength: Int
         "The number of data points to derive an average from."
         samples: Int
