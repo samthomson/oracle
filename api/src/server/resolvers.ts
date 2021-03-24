@@ -1,8 +1,8 @@
 import * as Types from '../declarations'
 import * as DBUtil from '../util/SequelizeDB'
 import * as NomicsData from '../services/nomics-data'
-
-const calculateAverage = (list) => list.reduce((prev, curr) => prev + curr) / list.length
+import * as DataCruncher from '../util/data-cruncher'
+import * as HelperUtil from '../util/helper'
 
 export const getCurrencies = async (parent: any, args: any, context: any, info: any) => {
     const rawCurrencies = await DBUtil.getCurrencies()
@@ -40,6 +40,16 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
     }
 }
 
+export const getMarkets = async () => {
+    const markets = await DBUtil.getMarkets()
+    return {
+        items: markets,
+        pageInfo: {
+            totalItems: markets.length,
+        },
+    }
+}
+
 const resolveMovingAverage = async (parent, currency): Promise<number | null> => {
     const {
         movingAverageInput: { periodLength, samples },
@@ -47,7 +57,7 @@ const resolveMovingAverage = async (parent, currency): Promise<number | null> =>
 
     // @ts-ignore
     const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
-    const average = prices.length > 0 ? calculateAverage(prices) : null
+    const average = prices.length > 0 ? HelperUtil.calculateAverage(prices) : null
     return average
 }
 
@@ -71,7 +81,7 @@ const resolveLatestPrice = async (currency) => {
 
 export const debug = async () => {
     const output = 'result'
-    await NomicsData.getValues()
+    await DataCruncher.crunchBittrexMarkets()
     return {
         output,
     }

@@ -116,6 +116,18 @@ export type CurrenciesQueryResult = {
     latestPrice: LatestPrice
 }
 
+type CrunchedMarketData = {
+    maThirtyMin: number
+    maTenHour: number
+}
+
+export type MarketsQueryResult = {
+    sourceId: number
+    quote: string
+    symbol: string
+    crunched: CrunchedMarketData
+}
+
 export type BittrexMarketTicker = {
     symbol: string
     lastTradeRate: number
