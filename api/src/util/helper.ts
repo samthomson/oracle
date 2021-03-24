@@ -10,3 +10,10 @@ export const bittrexV3MarketSymbolToQuoteSymbolObject = (bittrexV3MarketSymbol: 
         quote,
     }
 }
+
+export const calculateAverage = (list: number[]) => {
+    if (list?.length > 0) {
+        return list.reduce((prev, curr) => prev + curr) / list.length
+    }
+    return undefined
+}
