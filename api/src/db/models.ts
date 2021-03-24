@@ -79,8 +79,8 @@ export const CrunchedMarketData = Database.define(
             primaryKey: true,
         },
         marketId: Sequelize.SMALLINT.UNSIGNED,
-        maThirtyMin: { type: Sequelize.DECIMAL(32, 12), field: 'ma_30_min' },
-        maTenHour: { type: Sequelize.DECIMAL(32, 12), field: 'ma_10_hour' },
+        maThirtyMin: { type: Sequelize.DECIMAL(32, 12) /*, field: 'ma_30_min'*/ },
+        maTenHour: { type: Sequelize.DECIMAL(32, 12) /*, field: 'ma_10_hour'*/ },
         lastUpdated: Sequelize.DATE,
     },
     {
