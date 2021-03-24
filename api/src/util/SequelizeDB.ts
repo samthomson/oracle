@@ -120,7 +120,7 @@ export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> =>
 }
 
 export const getForMovingAverage = async (
-    periodLength: number,
+    periodLength: number, // minutes
     samples: number,
     marketId: number,
 ): Promise<number[]> => {
