@@ -40,6 +40,16 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
     }
 }
 
+export const getMarkets = async () => {
+    const markets = await DBUtil.getMarkets()
+    return {
+        items: markets,
+        pageInfo: {
+            totalItems: markets.length,
+        },
+    }
+}
+
 const resolveMovingAverage = async (parent, currency): Promise<number | null> => {
     const {
         movingAverageInput: { periodLength, samples },

@@ -52,10 +52,28 @@ const typeDefs = gql`
         output: String
     }
 
+    type MarketData {
+        sourceId: Int
+        quote: String
+        symbol: String
+        crunched: CrunchedMarketData
+    }
+
+    type CrunchedMarketData {
+        maThirtyMin: Float
+        maTenHour: Float
+    }
+
+    type MarketsResult {
+        items: [MarketData]!
+        pageInfo: PaginationInfo
+    }
+
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
         debug: DebugResult
+        markets: MarketsResult
     }
 `
 
@@ -64,6 +82,7 @@ const resolvers = {
         currency: Resolvers.getCurrency,
         currencies: Resolvers.getCurrencies,
         debug: Resolvers.debug,
+        markets: Resolvers.getMarkets,
     },
 }
 

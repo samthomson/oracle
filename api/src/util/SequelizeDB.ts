@@ -143,3 +143,31 @@ export const getForMovingAverage = async (
     // @ts-ignore
     return result.map((row) => parseFloat(row.price_quote))
 }
+
+export const getMarkets = async (): Promise<Types.MarketsQueryResult[]> => {
+    // hard coded to bittrex markets for now
+    const markets = await Models.Market.findAll({
+        where: { sourceId: 1 },
+        include: [
+            {
+                model: Models.CrunchedMarketData,
+            },
+        ],
+    })
+    return markets.map((market) => {
+        return {
+            // @ts-ignore
+            sourceId: market.sourceId,
+            // @ts-ignore
+            quote: market.quote,
+            // @ts-ignore
+            symbol: market.symbol,
+            crunched: {
+                // @ts-ignore
+                maThirtyMin: market.crunched_market_datum.maThirtyMin,
+                // @ts-ignore
+                maTenHour: market.crunched_market_datum.maTenHour,
+            },
+        }
+    })
+}
