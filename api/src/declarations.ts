@@ -136,3 +136,11 @@ export type BittrexMarketTicker = {
 }
 
 export type ExchangeSource = Constants.Source
+
+type RecentlyCrunchedMarkets = {
+    bittrex: number
+}
+
+export type HealthQueryResult = {
+    recentlyCrunchedMarkets: RecentlyCrunchedMarkets
+}
