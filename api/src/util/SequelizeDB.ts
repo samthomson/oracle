@@ -182,7 +182,7 @@ export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
     const healthyQueryResult = await SequelizeDB.query(healthyQuery, { type: Sequelize.QueryTypes.SELECT })
 
     // @ts-ignore
-    const recentlyCrunchedBittrexMarkets = healthyQueryResult?.[0]?.healthy ?? 0
+    const recentlyCrunchedBittrexMarkets = healthyQueryResult?.[0]?.healthyBittrexMarkets ?? 0
     const bittrexPercentCrunched =
         totalBittrexMarkets === 0
             ? 0
