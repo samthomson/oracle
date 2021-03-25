@@ -171,3 +171,32 @@ export const getMarkets = async (): Promise<Types.MarketsQueryResult[]> => {
         }
     })
 }
+
+export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
+    const totalBittrexMarkets = await Models.Market.count({
+        where: {
+            sourceId: 1,
+        },
+    })
+    const healthyQuery = `SELECT count(market.id) as healthyBittrexMarkets FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.source_id = 1 AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE`
+    const healthyQueryResult = await SequelizeDB.query(healthyQuery, { type: Sequelize.QueryTypes.SELECT })
+
+    // @ts-ignore
+    const recentlyCrunchedBittrexMarkets = healthyQueryResult?.[0]?.healthyBittrexMarkets ?? 0
+    const bittrexPercentCrunched =
+        totalBittrexMarkets === 0
+            ? 0
+            : Number(((recentlyCrunchedBittrexMarkets / totalBittrexMarkets) * 100).toFixed(2))
+
+    return {
+        recentlyCrunchedMarkets: {
+            bittrex: bittrexPercentCrunched,
+        },
+    }
+}
+
+/*
+SELECT market.quote, market.symbol, crunched_market_data.ma_thirty_min, crunched_market_data.ma_ten_hour, crunched_market_data.last_updated FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.source_id = 1 AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE LIMIT 1000 
+
+SELECT count(market.id) as healthyBittrexMarkets FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.source_id = 1 AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE 
+*/

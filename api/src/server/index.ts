@@ -69,11 +69,20 @@ const typeDefs = gql`
         pageInfo: PaginationInfo
     }
 
+    type RecentlyCrunchedMarkets {
+        bittrex: Float
+    }
+
+    type Health {
+        recentlyCrunchedMarkets: RecentlyCrunchedMarkets
+    }
+
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
         debug: DebugResult
         markets: MarketsResult
+        health: Health
     }
 `
 
@@ -83,6 +92,7 @@ const resolvers = {
         currencies: Resolvers.getCurrencies,
         debug: Resolvers.debug,
         markets: Resolvers.getMarkets,
+        health: Resolvers.health,
     },
 }
 

@@ -86,3 +86,7 @@ export const debug = async () => {
         output,
     }
 }
+
+export const health = async () => {
+    return await DBUtil.getHealthData()
+}
