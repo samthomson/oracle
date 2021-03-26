@@ -1,8 +1,10 @@
+import moment from 'moment'
 import * as Types from '../declarations'
 import * as NomicsService from '../services/nomics-data'
 import * as BittrexService from '../services/bittrex-data'
 import * as DBUtil from './SequelizeDB'
 import * as HelperUtil from '../util/helper'
+import Logger from '../services/logging'
 
 export const pullNomicsData = async () => {
     // ensure tables exist
@@ -37,6 +39,7 @@ export const pullNomicsData = async () => {
 }
 
 export const pullBittrexData = async () => {
+    const startTime = moment()
     // pull all currency data
     const bittrexTickers = await BittrexService.getValues()
 
@@ -65,5 +68,12 @@ export const pullBittrexData = async () => {
     logEntry.currenciesSaved = draftMarkets.length
     logEntry.save()
 
-    console.log('\n\nall done')
+    const endTime = moment()
+    const milliseconds = endTime.diff(startTime)
+    const perMarket = milliseconds / bittrexTickers.length
+    Logger.info(
+        `time spent importing bittrex markets price data: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
+            bittrexTickers.length
+        }`,
+    )
 }
