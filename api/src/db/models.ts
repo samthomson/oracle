@@ -42,6 +42,12 @@ export const Market = Database.define(
         name: Sequelize.STRING(128),
         symbol: Sequelize.STRING(32),
         quote: Sequelize.STRING(8),
+        minTradeSize: Sequelize.DECIMAL(32, 12),
+        status: Sequelize.STRING(16),
+        high: Sequelize.DECIMAL(32, 12),
+        low: Sequelize.DECIMAL(32, 12),
+        quoteVolume: Sequelize.DECIMAL(32, 12),
+        lastTradeRate: Sequelize.DECIMAL(32, 12),
     },
     {
         timestamps: true,

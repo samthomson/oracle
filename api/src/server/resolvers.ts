@@ -1,6 +1,6 @@
 import * as Types from '../declarations'
 import * as DBUtil from '../util/SequelizeDB'
-import * as NomicsData from '../services/nomics-data'
+import * as BittrexData from '../services/bittrex-data'
 import * as DataCruncher from '../util/data-cruncher'
 import * as HelperUtil from '../util/helper'
 
@@ -81,7 +81,7 @@ const resolveLatestPrice = async (currency) => {
 
 export const debug = async () => {
     const output = 'result'
-    await DataCruncher.crunchBittrexMarkets()
+    const data = await BittrexData.getValues()
     return {
         output,
     }

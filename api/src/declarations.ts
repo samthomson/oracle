@@ -128,8 +128,37 @@ export type MarketsQueryResult = {
     crunched: CrunchedMarketData
 }
 
-export type BittrexMarketTicker = {
+export namespace Bittrex {
+    export type Market = {
+        symbol: string
+        baseCurrencySymbol: string
+        quoteCurrencySymbol: string
+        minTradeSize: number
+        status: string
+    }
+    export type MarketSummary = {
+        symbol: string
+        high: number
+        low: number
+        quoteVolume: number
+    }
+    export type MarketTicker = {
+        symbol: string
+        lastTradeRate: number
+        bidRate: number
+        askRate: number
+    }
+}
+
+export type BittrexMarketComposite = {
     symbol: string
+    baseCurrencySymbol: string
+    quoteCurrencySymbol: string
+    minTradeSize: number
+    status: string
+    high: number
+    low: number
+    quoteVolume: number
     lastTradeRate: number
     bidRate: number
     askRate: number

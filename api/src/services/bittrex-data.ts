@@ -100,11 +100,59 @@ const bittrexRequestV3 = async (
     }
 }
 
-export const getValues = async (): Promise<Types.BittrexMarketTicker[]> => {
+export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
     try {
-        const listings: Types.BittrexMarketTicker[] = (await bittrexRequestV3('markets/tickers')).payload
+        const bittrexMarkets: Types.Bittrex.Market[] = (await bittrexRequestV3('markets')).payload
+        const bittrexSummaries: Types.Bittrex.MarketSummary[] = (await bittrexRequestV3('markets/summaries')).payload
+        const bittrexTickers: Types.Bittrex.MarketTicker[] = (await bittrexRequestV3('markets/tickers')).payload
 
-        return listings
+        const keyedSummaries = (() => {
+            const keyed = {}
+            for (let i = 0; i < bittrexSummaries.length; i++) {
+                const { symbol, high, low, quoteVolume } = bittrexSummaries[i]
+                keyed[symbol] = {
+                    high,
+                    low,
+                    quoteVolume,
+                }
+            }
+            return keyed
+        })()
+
+        const keyedTickers = (() => {
+            const keyed = {}
+            for (let i = 0; i < bittrexTickers.length; i++) {
+                const { symbol, lastTradeRate, bidRate, askRate } = bittrexTickers[i]
+                keyed[symbol] = {
+                    lastTradeRate,
+                    bidRate,
+                    askRate,
+                }
+            }
+            return keyed
+        })()
+
+        const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets.map((market) => {
+            const { symbol, baseCurrencySymbol, quoteCurrencySymbol, minTradeSize, status } = market
+            const summary = keyedSummaries[symbol]
+            const ticker = keyedTickers[symbol]
+
+            return {
+                symbol,
+                baseCurrencySymbol,
+                quoteCurrencySymbol,
+                minTradeSize: Number(minTradeSize),
+                status,
+                high: Number(summary.high),
+                low: Number(summary.low),
+                quoteVolume: Number(summary.quoteVolume),
+                lastTradeRate: Number(ticker.lastTradeRate),
+                bidRate: Number(ticker.bidRate),
+                askRate: Number(ticker.askRate),
+            }
+        })
+
+        return compositeMarkets
     } catch (err) {
         Logger.error('error assembling bittrex data', err)
         return []

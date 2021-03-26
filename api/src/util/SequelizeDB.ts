@@ -10,37 +10,50 @@ export const createLogEntry: any = (source: Types.ExchangeSource) =>
         source,
     })
 
-export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
-    const { symbol, quote, name, sourceId } = currency
+export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMarketComposite) => {
+    const {
+        symbol: name,
+        baseCurrencySymbol: symbol,
+        quoteCurrencySymbol: quote,
+        minTradeSize,
+        status,
+        high,
+        low,
+        quoteVolume,
+        lastTradeRate,
+    } = market
 
-    const whereQuery =
-        sourceId === Types.Constants.Source.Nomics
-            ? {
-                  nomicsId: currency.id,
-                  sourceId: Types.Constants.Source.Nomics,
-              }
-            : {
-                  sourceId,
-                  quote,
-                  symbol,
-              }
+    const sourceId = Types.Constants.Source.Bittrex
+    const newData = {
+        sourceId,
+        name,
+        symbol,
+        quote,
+        minTradeSize,
+        status,
+        high,
+        low,
+        quoteVolume,
+        lastTradeRate,
+    }
 
-    const [record] = await Models.Market.findOrCreate({
-        where: whereQuery,
-        defaults: {
-            nomicsId: currency?.id ?? null,
-            symbol,
-            quote,
-            name,
-            sourceId,
-        },
-    })
-    return record.get({ plain: true })
+    // create or update
+    const marketAlreadyExisting = await Models.Market.findOne({ where: { name } })
+
+    if (marketAlreadyExisting) {
+        await Models.Market.update(newData, {
+            where: {
+                name,
+            },
+        })
+        return marketAlreadyExisting.get({ plain: true })
+    } else {
+        const newMarket = await Models.Market.create(newData)
+        return newMarket.get({ plain: true })
+    }
 }
 
-export const createCurrencyEntry: any = (marketId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
-    const { price: priceQuote } = draftMarket
-
+export const createCurrencyEntry: any = (marketId: number, logEntryId: number, priceQuote: number) => {
     return Models.MarketEntry.create({
         marketId,
         logEntryId,
