@@ -27,12 +27,37 @@ export const crunchBittrexMarkets = async () => {
                 lastUpdated: moment.now(),
             }
 
-            // for all crunched data
-            // // find CrunchedMarketData record and update or create new
+            // for all crunched data - find CrunchedMarketData record and update or create new
             const [crunchedData, created] = await Models.CrunchedMarketData.findOrCreate({
                 where: { marketId },
                 defaults: newData,
             })
+
+            const crunchedMarketIds = (
+                await Models.CrunchedMarketData.findAll({
+                    attributes: ['marketId'],
+                })
+            )
+                // @ts-ignore
+                .map((market) => market.marketId)
+
+            if (!crunchedMarketIds.includes(marketId)) {
+                // create it afresh
+                await Models.CrunchedMarketData.create({
+                    marketId,
+                    ...newData,
+                })
+            } else {
+                // update it
+                await Models.CrunchedMarketData.update(
+                    {
+                        ...newData,
+                    },
+                    {
+                        where: { marketId },
+                    },
+                )
+            }
 
             if (!created) {
                 crunchedData.update(newData)
