@@ -56,6 +56,14 @@ const typeDefs = gql`
         sourceId: Int
         quote: String
         symbol: String
+        minTradeSize: Float
+        status: String
+        high: Float
+        low: Float
+        quoteVolume: Float
+        lastTradeRate: Float
+        bidRate: Float
+        askRate: Float
         crunched: CrunchedMarketData
     }
 

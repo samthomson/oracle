@@ -10,37 +10,54 @@ export const createLogEntry: any = (source: Types.ExchangeSource) =>
         source,
     })
 
-export const ensureMarketExists: any = async (currency: Types.DraftMarket) => {
-    const { symbol, quote, name, sourceId } = currency
+export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMarketComposite) => {
+    const {
+        name,
+        symbol,
+        quote,
+        minTradeSize,
+        status,
+        high,
+        low,
+        quoteVolume,
+        lastTradeRate,
+        bidRate,
+        askRate,
+    } = market
 
-    const whereQuery =
-        sourceId === Types.Constants.Source.Nomics
-            ? {
-                  nomicsId: currency.id,
-                  sourceId: Types.Constants.Source.Nomics,
-              }
-            : {
-                  sourceId,
-                  quote,
-                  symbol,
-              }
+    const sourceId = Types.Constants.Source.Bittrex
+    const newData = {
+        sourceId,
+        name,
+        symbol,
+        quote,
+        minTradeSize,
+        status,
+        high,
+        low,
+        quoteVolume,
+        lastTradeRate,
+        bidRate,
+        askRate,
+    }
 
-    const [record] = await Models.Market.findOrCreate({
-        where: whereQuery,
-        defaults: {
-            nomicsId: currency?.id ?? null,
-            symbol,
-            quote,
-            name,
-            sourceId,
-        },
-    })
-    return record.get({ plain: true })
+    // create or update
+    const marketAlreadyExisting = await Models.Market.findOne({ where: { name } })
+
+    if (marketAlreadyExisting) {
+        await Models.Market.update(newData, {
+            where: {
+                name,
+            },
+        })
+        return marketAlreadyExisting.get({ plain: true })
+    } else {
+        const newMarket = await Models.Market.create(newData)
+        return newMarket.get({ plain: true })
+    }
 }
 
-export const createCurrencyEntry: any = (marketId: number, logEntryId: number, draftMarket: Types.DraftMarket) => {
-    const { price: priceQuote } = draftMarket
-
+export const createCurrencyEntry: any = (marketId: number, logEntryId: number, priceQuote: number) => {
     return Models.MarketEntry.create({
         marketId,
         logEntryId,
@@ -144,29 +161,30 @@ export const getForMovingAverage = async (
     return result.map((row) => parseFloat(row.price_quote))
 }
 
-export const getMarkets = async (): Promise<Types.MarketsQueryResult[]> => {
+export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
     // hard coded to bittrex markets for now
-    const markets = await Models.Market.findAll({
-        where: { sourceId: 1 },
-        include: [
-            {
-                model: Models.CrunchedMarketData,
-            },
-        ],
-    })
+    // @ts-ignore
+    const markets: Types.DBMarketModelData[] = (
+        await Models.Market.findAll({
+            where: { sourceId: 1 },
+            include: [
+                {
+                    model: Models.CrunchedMarketData,
+                },
+            ],
+        })
+    ).map((instance) => instance.get({ plain: true }))
     return markets.map((market) => {
+        const {
+            // @ts-ignore
+            crunched_market_datum: { maThirtyMin, maTenHour },
+        } = market
+
         return {
-            // @ts-ignore
-            sourceId: market.sourceId,
-            // @ts-ignore
-            quote: market.quote,
-            // @ts-ignore
-            symbol: market.symbol,
+            ...market,
             crunched: {
-                // @ts-ignore
-                maThirtyMin: market.crunched_market_datum.maThirtyMin,
-                // @ts-ignore
-                maTenHour: market.crunched_market_datum.maTenHour,
+                maThirtyMin,
+                maTenHour,
             },
         }
     })

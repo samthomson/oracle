@@ -10,10 +10,8 @@ export const crunchBittrexMarkets = async () => {
         const startTime = moment()
         // get all bittrex markets
         const markets = await Models.Market.findAll({ limit: 1000, where: { sourceId: 1 } })
-        // filter to tenable
-        // for each market crunch an MA
-        const crunched = []
 
+        // for each market crunch an MA
         for (let i = 0; i < markets.length; i++) {
             const market = markets[i]
             // @ts-ignore
