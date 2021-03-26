@@ -121,13 +121,6 @@ type CrunchedMarketData = {
     maTenHour: number
 }
 
-export type MarketsQueryResult = {
-    sourceId: number
-    quote: string
-    symbol: string
-    crunched: CrunchedMarketData
-}
-
 export namespace Bittrex {
     export type Market = {
         symbol: string
@@ -151,9 +144,9 @@ export namespace Bittrex {
 }
 
 export type BittrexMarketComposite = {
+    name: string
+    quote: string
     symbol: string
-    baseCurrencySymbol: string
-    quoteCurrencySymbol: string
     minTradeSize: number
     status: string
     high: number
@@ -162,6 +155,14 @@ export type BittrexMarketComposite = {
     lastTradeRate: number
     bidRate: number
     askRate: number
+}
+
+export interface DBMarketModelData extends BittrexMarketComposite {
+    sourceId: number
+}
+
+export interface APIMarketsQueryResult extends DBMarketModelData {
+    crunched: CrunchedMarketData
 }
 
 export type ExchangeSource = Constants.Source

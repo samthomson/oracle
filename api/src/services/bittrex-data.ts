@@ -133,14 +133,24 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
         })()
 
         const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets.map((market) => {
-            const { symbol, baseCurrencySymbol, quoteCurrencySymbol, minTradeSize, status } = market
-            const summary = keyedSummaries[symbol]
-            const ticker = keyedTickers[symbol]
+            const {
+                symbol: name,
+                baseCurrencySymbol: symbol,
+                quoteCurrencySymbol: quote,
+                minTradeSize,
+                status,
+            } = market
+            const summary = keyedSummaries[name]
+            const ticker = keyedTickers[name]
+
+            if (!summary) {
+                console.log('not defined', summary)
+            }
 
             return {
+                name,
                 symbol,
-                baseCurrencySymbol,
-                quoteCurrencySymbol,
+                quote,
                 minTradeSize: Number(minTradeSize),
                 status,
                 high: Number(summary.high),
