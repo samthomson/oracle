@@ -72,7 +72,7 @@ export const pullBittrexData = async () => {
     const milliseconds = endTime.diff(startTime)
     const perMarket = milliseconds / bittrexTickers.length
     Logger.info(
-        `time spent importing bittrex markets price data: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
+        `1. time spent importing bittrex markets price data: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
             bittrexTickers.length
         }`,
     )

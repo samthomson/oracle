@@ -43,7 +43,7 @@ export const crunchBittrexMarkets = async () => {
         const milliseconds = endTime.diff(startTime)
         const perMarket = milliseconds / markets.length
         Logger.info(
-            `time spent crunching bittrex markets' MAs: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
+            `2. time spent crunching bittrex markets' MAs: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
                 markets.length
             }`,
         )

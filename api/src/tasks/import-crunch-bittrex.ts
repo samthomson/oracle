@@ -11,7 +11,7 @@ export const importCrunch = async () => {
     const endTime = moment()
     const milliseconds = endTime.diff(startTime)
 
-    Logger.info(`time spent importing & crunching bittrex markets: ${milliseconds.toLocaleString()} ms`)
+    Logger.info(`3. time spent importing & crunching bittrex markets: ${milliseconds.toLocaleString()} ms`)
 }
 
 importCrunch()
