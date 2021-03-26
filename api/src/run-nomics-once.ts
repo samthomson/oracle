@@ -1,3 +1,3 @@
-import { pullNomicsData } from './util/data-importer'
+// import { pullNomicsData } from './util/data-importer'
 
-pullNomicsData()
+// pullNomicsData()
