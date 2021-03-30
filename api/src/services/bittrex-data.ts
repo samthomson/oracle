@@ -132,35 +132,45 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
             return keyed
         })()
 
-        const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets.map((market) => {
-            const {
-                symbol: name,
-                baseCurrencySymbol: symbol,
-                quoteCurrencySymbol: quote,
-                minTradeSize,
-                status,
-            } = market
-            const summary = keyedSummaries[name]
-            const ticker = keyedTickers[name]
+        const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets
+            // active markets only
+            .filter((market) => market.symbol === 'ONLINE')
+            .map((market) => {
+                const {
+                    symbol: name,
+                    baseCurrencySymbol: symbol,
+                    quoteCurrencySymbol: quote,
+                    minTradeSize,
+                    status,
+                } = market
+                const summary = keyedSummaries[name]
+                const ticker = keyedTickers[name]
 
-            if (!summary) {
-                console.log('not defined', summary)
-            }
+                if (!summary) {
+                    Logger.warn('summary not defined', market)
+                }
+                if (!ticker) {
+                    Logger.warn('ticker not defined', market)
+                }
 
-            return {
-                name,
-                symbol,
-                quote,
-                minTradeSize: Number(minTradeSize),
-                status,
-                high: Number(summary.high),
-                low: Number(summary.low),
-                quoteVolume: Number(summary.quoteVolume),
-                lastTradeRate: Number(ticker.lastTradeRate),
-                bidRate: Number(ticker.bidRate),
-                askRate: Number(ticker.askRate),
-            }
-        })
+                if (ticker && summary) {
+                    return {
+                        name,
+                        symbol,
+                        quote,
+                        minTradeSize: Number(minTradeSize),
+                        status,
+                        high: Number(summary.high),
+                        low: Number(summary.low),
+                        quoteVolume: Number(summary.quoteVolume),
+                        lastTradeRate: Number(ticker.lastTradeRate),
+                        bidRate: Number(ticker.bidRate),
+                        askRate: Number(ticker.askRate),
+                    }
+                }
+            })
+            // filter out undefined (where summary or ticker was not set)
+            .filter((market) => market)
 
         return compositeMarkets
     } catch (err) {
