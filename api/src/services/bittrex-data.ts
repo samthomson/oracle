@@ -134,7 +134,7 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
 
         const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets
             // active markets only
-            .filter((market) => market.symbol === 'ONLINE')
+            .filter((market) => market.status === 'ONLINE')
             .map((market) => {
                 const {
                     symbol: name,
