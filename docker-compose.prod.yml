@@ -16,7 +16,7 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD_PROD}
       - NODE_ENV=development
-      - LOG_LEVEL=info
+      - LOG_LEVEL=warn
     ports:
       - "80:4000"
       - "443:4000"
