@@ -23,6 +23,7 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMark
         lastTradeRate,
         bidRate,
         askRate,
+        precision,
     } = market
 
     const sourceId = Types.Constants.Source.Bittrex
@@ -39,6 +40,7 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMark
         lastTradeRate,
         bidRate,
         askRate,
+        precision,
     }
 
     // create or update
@@ -175,17 +177,15 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
         })
     ).map((instance) => instance.get({ plain: true }))
     return markets.map((market) => {
-        const {
-            // @ts-ignore
-            crunched_market_datum: { maThirtyMin, maTenHour },
-        } = market
+        // @ts-ignore
+        const { crunched_market_datum } = market
+        const crunched = crunched_market_datum
+            ? { maThirtyMin: crunched_market_datum.maThirtyMin, maTenHour: crunched_market_datum.maTenHour }
+            : undefined
 
         return {
             ...market,
-            crunched: {
-                maThirtyMin,
-                maTenHour,
-            },
+            crunched,
         }
     })
 }

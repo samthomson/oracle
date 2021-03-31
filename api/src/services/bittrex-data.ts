@@ -142,6 +142,7 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
                     quoteCurrencySymbol: quote,
                     minTradeSize,
                     status,
+                    precision,
                 } = market
                 const summary = keyedSummaries[name]
                 const ticker = keyedTickers[name]
@@ -160,6 +161,7 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
                         quote,
                         minTradeSize: Number(minTradeSize),
                         status,
+                        precision: Number(precision),
                         high: Number(summary.high),
                         low: Number(summary.low),
                         quoteVolume: Number(summary.quoteVolume),

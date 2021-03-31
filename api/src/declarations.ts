@@ -128,6 +128,7 @@ export namespace Bittrex {
         quoteCurrencySymbol: string
         minTradeSize: number
         status: string
+        precision: number
     }
     export type MarketSummary = {
         symbol: string
@@ -155,6 +156,7 @@ export type BittrexMarketComposite = {
     lastTradeRate: number
     bidRate: number
     askRate: number
+    precision: number
 }
 
 export interface DBMarketModelData extends BittrexMarketComposite {

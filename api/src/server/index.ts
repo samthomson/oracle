@@ -64,6 +64,7 @@ const typeDefs = gql`
         lastTradeRate: Float
         bidRate: Float
         askRate: Float
+        precision: Float
         crunched: CrunchedMarketData
     }
 
