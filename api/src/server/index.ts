@@ -71,6 +71,7 @@ const typeDefs = gql`
     type CrunchedMarketData {
         maThirtyMin: Float
         maTenHour: Float
+        lastUpdated: String
     }
 
     type MarketsResult {

@@ -180,7 +180,11 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
         // @ts-ignore
         const { crunched_market_datum } = market
         const crunched = crunched_market_datum
-            ? { maThirtyMin: crunched_market_datum.maThirtyMin, maTenHour: crunched_market_datum.maTenHour }
+            ? {
+                  maThirtyMin: crunched_market_datum.maThirtyMin,
+                  maTenHour: crunched_market_datum.maTenHour,
+                  lastUpdated: crunched_market_datum.lastUpdated.toISOString(),
+              }
             : undefined
 
         return {
