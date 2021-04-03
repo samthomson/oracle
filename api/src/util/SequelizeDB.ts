@@ -183,6 +183,7 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
             ? {
                   maThirtyMin: crunched_market_datum.maThirtyMin,
                   maTenHour: crunched_market_datum.maTenHour,
+                  maInstant: crunched_market_datum.maInstant,
                   lastUpdated: crunched_market_datum.lastUpdated.toISOString(),
               }
             : undefined
