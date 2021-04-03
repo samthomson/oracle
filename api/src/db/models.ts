@@ -91,6 +91,7 @@ export const CrunchedMarketData = Database.define(
         maThirtyMin: { type: Sequelize.DECIMAL(32, 12) /*, field: 'ma_30_min'*/ },
         maTenHour: { type: Sequelize.DECIMAL(32, 12) /*, field: 'ma_10_hour'*/ },
         lastUpdated: Sequelize.DATE,
+        maInstant: Sequelize.DECIMAL(32, 12),
     },
     {
         timestamps: false,

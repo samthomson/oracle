@@ -18,12 +18,18 @@ export const crunchBittrexMarkets = async () => {
             const { id: marketId } = market
             const halfHourPrices = await DBUtil.getForMovingAverage(5, 12, marketId)
             const tenHourPrices = await DBUtil.getForMovingAverage(60, 10, marketId)
+            // determine instantaneous moving average by taking last prices from already queried half hour price points
+            // prob update later when I start querying for prices more frequently - eg just take last ten prices when querying each minute, or 5 at one minute.
+            // assuming prices are ordered chronologically
+            const fifteenMinutesPrices = halfHourPrices.filter((_, index) => index > 8) // 9,10,11
 
             const newData = {
                 maThirtyMin: HelperUtil.calculateAverage(halfHourPrices),
                 maTenHour: HelperUtil.calculateAverage(tenHourPrices),
+                maInstant: HelperUtil.calculateAverage(fifteenMinutesPrices),
                 lastUpdated: moment.now(),
             }
+            // console.log('new data', { ...newData, fifteenMinutesPrices })
 
             // for all crunched data - find CrunchedMarketData record and update or create new
             const [crunchedData, created] = await Models.CrunchedMarketData.findOrCreate({

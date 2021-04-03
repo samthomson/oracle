@@ -8,8 +8,8 @@
   "scripts": {
     "import-nomics": "ts-node src/run-nomics-once.ts",
     "import-bittrex": "ts-node src/run-bittrex-once.ts",
-    "import-crunch-bittrex": "ts-node src/tasks/import-crunch-bittrex.ts",
     "crunch-bittrex": "ts-node src/crunch-data.ts",
+    "import-crunch-bittrex": "ts-node src/tasks/import-crunch-bittrex.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts",
