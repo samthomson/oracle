@@ -21,7 +21,7 @@ export const crunchBittrexMarkets = async () => {
             // determine instantaneous moving average by taking last prices from already queried half hour price points
             // prob update later when I start querying for prices more frequently - eg just take last ten prices when querying each minute, or 5 at one minute.
             // assuming prices are ordered chronologically
-            const fifteenMinutesPrices = halfHourPrices.filter((_, index) => index > 8) // 9,10,11
+            const fifteenMinutesPrices = halfHourPrices.filter((_, index) => index > 4) // 5,6,7,8,9
 
             const newData = {
                 maThirtyMin: HelperUtil.calculateAverage(halfHourPrices),
