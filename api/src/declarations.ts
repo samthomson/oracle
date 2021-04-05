@@ -176,3 +176,11 @@ type RecentlyCrunchedMarkets = {
 export type HealthQueryResult = {
     recentlyCrunchedMarkets: RecentlyCrunchedMarkets
 }
+
+export type APIRequestStat = {
+    service: string
+
+    lastHourCount: number
+    lastDayCount: number
+    lastMonthCount: number
+}

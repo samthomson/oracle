@@ -88,15 +88,27 @@ const typeDefs = gql`
         recentlyCrunchedMarkets: RecentlyCrunchedMarkets
     }
 
+    type APIRequestsStats {
+        service: String
+        lastHourCount: Int
+        lastDayCount: Int
+        lastMonthCount: Int
+    }
+
+    type RequestLogs {
+        total: Int
+        items: [APIRequestsStats]
+    }
+
     type Query {
         currencies: CurrenciesResult
         currency(input: CurrencyQueryInput): Currency
         debug: DebugResult
         markets: MarketsResult
         health: Health
+        requestLogs: RequestLogs
     }
 `
-
 const resolvers = {
     Query: {
         currency: Resolvers.getCurrency,
@@ -104,6 +116,7 @@ const resolvers = {
         debug: Resolvers.debug,
         markets: Resolvers.getMarkets,
         health: Resolvers.health,
+        requestLogs: Resolvers.requestLogs,
     },
 }
 

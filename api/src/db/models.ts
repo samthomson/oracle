@@ -106,3 +106,34 @@ LogEntry.hasMany(MarketEntry)
 MarketEntry.belongsTo(LogEntry)
 MarketEntry.belongsTo(Market)
 Market.hasOne(CrunchedMarketData)
+
+export const RequestLog = Database.define(
+    'request_logs',
+    {
+        id: {
+            type: Sequelize.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        serviceInt: {
+            type: Sequelize.INTEGER,
+            field: 'service_int',
+            defaultValue: null,
+        },
+        url: {
+            type: Sequelize.STRING,
+            field: 'url',
+        },
+        params: {
+            type: Sequelize.STRING,
+            field: 'params',
+        },
+        datetime: {
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.NOW,
+        },
+    },
+    {
+        timestamps: false,
+    },
+)

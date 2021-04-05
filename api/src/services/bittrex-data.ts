@@ -71,7 +71,7 @@ const bittrexRequestV3 = async (
         attemptsMade++
         try {
             // log this request attempt
-            // await HelperUtil.logRequest('Bittrex', apiRouteUrl, queryParamString)
+            await HelperUtil.logRequest('Bittrex', apiRouteUrl, queryParamString)
 
             // attempt to make request
             const httpRequest = await fetch(signUri, options)
