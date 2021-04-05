@@ -90,3 +90,11 @@ export const debug = async () => {
 export const health = async () => {
     return await DBUtil.getHealthData()
 }
+
+export const requestLogs = async () => {
+    const APIStats = await HelperUtil.getAPIRequestStats()
+    return {
+        total: APIStats.length,
+        items: APIStats,
+    }
+}
