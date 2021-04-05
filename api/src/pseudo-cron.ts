@@ -4,6 +4,6 @@ import * as DataImporter from './util/data-importer'
 import * as BittrexImporter from './tasks/import-crunch-bittrex'
 
 // every fifth minute
-const cronFrequency = '*/5 * * * *'
+const cronFrequency = '*/3 * * * *'
 
 new CronJob(cronFrequency, () => BittrexImporter.importCrunch(), undefined, true, 'Europe/London')
