@@ -1,7 +1,7 @@
 import moment from 'moment'
 import * as Models from '../db/models'
 
-const logDataAges = async () => {
+export const logDataAges = async () => {
     const crunchedMarkets = await Models.CrunchedMarketData.findAll()
 
     const ages = crunchedMarkets.map((crunched) => {
