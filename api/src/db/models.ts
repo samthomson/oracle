@@ -137,3 +137,33 @@ export const RequestLog = Database.define(
         timestamps: false,
     },
 )
+
+export const DataAge = Database.define(
+    'data_age',
+    {
+        id: {
+            type: Sequelize.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        datetime: {
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.NOW,
+        },
+        crunchedMin: {
+            type: Sequelize.INTEGER,
+            field: 'crunched_min',
+        },
+        crunchedMax: {
+            type: Sequelize.INTEGER,
+            field: 'crunched_max',
+        },
+        crunchedAverage: {
+            type: Sequelize.INTEGER,
+            field: 'crunched_average',
+        },
+    },
+    {
+        timestamps: false,
+    },
+)
