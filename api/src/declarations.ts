@@ -179,6 +179,7 @@ export type DataAges = {
     max: number
     average: number
     at: string
+    missing: number
 }
 
 export type HealthQueryResult = {

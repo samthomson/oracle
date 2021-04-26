@@ -19,5 +19,6 @@ export const getDataAgesFromMarkets = (markets: Types.APIMarketsQueryResult[]): 
         max,
         average,
         at: moment().toISOString(),
+        missing: markets.length - ages.length,
     }
 }

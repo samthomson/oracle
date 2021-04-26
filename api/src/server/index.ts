@@ -90,6 +90,7 @@ const typeDefs = gql`
         max: Int
         average: Int
         at: String
+        missing: Int
     }
 
     type Health {
