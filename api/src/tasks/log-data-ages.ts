@@ -12,7 +12,7 @@ export const logDataAges = async () => {
 
     const crunchedMin = Math.min(...ages)
     const crunchedMax = Math.max(...ages)
-    const crunchedAverage = ages.reduce((acc, v) => acc + v) / ages.length
+    const crunchedAverage = Math.ceil(ages.reduce((acc, v) => acc + v) / ages.length)
 
     await Models.DataAge.create({
         crunchedMin,

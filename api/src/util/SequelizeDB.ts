@@ -211,10 +211,29 @@ export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
             ? 0
             : Number(((recentlyCrunchedBittrexMarkets / totalBittrexMarkets) * 100).toFixed(2))
 
+    const latestDataAge = await Models.DataAge.findAll({
+        limit: 1,
+        order: [['datetime', 'DESC']],
+    })
+
+    const latestDataAges: Types.DataAges = latestDataAge?.[0]
+        ? {
+              // @ts-ignore
+              min: latestDataAge[0].crunchedMin,
+              // @ts-ignore
+              max: latestDataAge[0].crunchedMax,
+              // @ts-ignore
+              average: latestDataAge[0].crunchedAverage,
+              // @ts-ignore
+              at: latestDataAge[0].datetime,
+          }
+        : undefined
+
     return {
         recentlyCrunchedMarkets: {
             bittrex: bittrexPercentCrunched,
         },
+        dataAges: latestDataAges,
     }
 }
 

@@ -173,8 +173,16 @@ type RecentlyCrunchedMarkets = {
     bittrex: number
 }
 
+export type DataAges = {
+    min: number
+    max: number
+    average: number
+    at: string
+}
+
 export type HealthQueryResult = {
     recentlyCrunchedMarkets: RecentlyCrunchedMarkets
+    dataAges: DataAges
 }
 
 export type APIRequestStat = {

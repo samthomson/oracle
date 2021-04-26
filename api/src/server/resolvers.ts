@@ -2,6 +2,7 @@ import * as Types from '../declarations'
 import * as DBUtil from '../util/SequelizeDB'
 import * as BittrexData from '../services/bittrex-data'
 import * as DataCruncher from '../util/data-cruncher'
+import * as DataAges from '../util/data-ages'
 import * as HelperUtil from '../util/helper'
 
 export const getCurrencies = async (parent: any, args: any, context: any, info: any) => {
@@ -42,11 +43,13 @@ export const getCurrency = async (parent: any, args: any, context: any, info: an
 
 export const getMarkets = async () => {
     const markets = await DBUtil.getMarkets()
+    const dataAges = DataAges.getDataAgesFromMarkets(markets)
     return {
         items: markets,
         pageInfo: {
             totalItems: markets.length,
         },
+        dataAges,
     }
 }
 

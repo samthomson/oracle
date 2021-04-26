@@ -78,14 +78,23 @@ const typeDefs = gql`
     type MarketsResult {
         items: [MarketData]!
         pageInfo: PaginationInfo
+        dataAges: DataAges
     }
 
     type RecentlyCrunchedMarkets {
         bittrex: Float
     }
 
+    type DataAges {
+        min: Int
+        max: Int
+        average: Int
+        at: String
+    }
+
     type Health {
         recentlyCrunchedMarkets: RecentlyCrunchedMarkets
+        dataAges: DataAges
     }
 
     type APIRequestsStats {
