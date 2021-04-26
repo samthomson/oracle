@@ -119,6 +119,7 @@ export type CurrenciesQueryResult = {
 type CrunchedMarketData = {
     maThirtyMin: number
     maTenHour: number
+    lastUpdated: string
 }
 
 export namespace Bittrex {
