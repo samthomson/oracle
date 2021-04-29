@@ -2,6 +2,7 @@ import Sequelize from 'sequelize'
 
 import SequelizeDB from '../db/connection'
 import * as Models from '../db/models'
+import * as Helper from './helper'
 
 import * as Types from '../declarations'
 
@@ -190,14 +191,18 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
               }
             : undefined
 
+        const exchange = Helper.sourceIntToString(market.sourceId)
+
         return {
             ...market,
             crunched,
+            exchange,
         }
     })
 }
 
 export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
+    // todo: update to check source 2
     const totalBittrexMarkets = await Models.Market.count({
         where: {
             sourceId: 1,

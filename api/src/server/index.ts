@@ -54,6 +54,7 @@ const typeDefs = gql`
 
     type MarketData {
         sourceId: Int
+        exchange: String
         quote: String
         symbol: String
         minTradeSize: Float

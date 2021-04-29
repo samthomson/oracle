@@ -42,6 +42,28 @@ const serviceIntToString = (service: number): string | undefined => {
     }
 }
 
+export const sourceStringToInt = (service: string): number | null => {
+    switch (service) {
+        case 'BITTREX':
+            return 1
+        case 'BINANCE':
+            return 2
+        default:
+            return null
+    }
+}
+
+export const sourceIntToString = (service: number): string | undefined => {
+    switch (service) {
+        case 1:
+            return 'BITTREX'
+        case 2:
+            return 'BINANCE'
+        default:
+            return undefined
+    }
+}
+
 export const logRequest = async (
     service: 'Bittrex',
     requestUrl: string,
