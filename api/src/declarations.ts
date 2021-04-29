@@ -166,6 +166,7 @@ export interface DBMarketModelData extends ExchangeMarketComposite {
 }
 
 export interface APIMarketsQueryResult extends DBMarketModelData {
+    exchange: string
     crunched: CrunchedMarketData
 }
 
