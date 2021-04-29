@@ -8,6 +8,7 @@
   "scripts": {
     "import-nomics": "ts-node src/run-nomics-once.ts",
     "import-bittrex": "ts-node src/run-bittrex-once.ts",
+    "import-binance": "ts-node src/tasks/run-binance-once.ts",
     "crunch-bittrex": "ts-node src/crunch-data.ts",
     "import-crunch-bittrex": "ts-node src/tasks/import-crunch-bittrex.ts",
     "log-data-ages": "ts-node src/tasks/log-data-ages.ts",
@@ -24,6 +25,7 @@
   "dependencies": {
     "apollo-server": "^2.19.2",
     "app-root-path": "^3.0.0",
+    "ccxt": "^1.49.13",
     "cron": "^1.8.2",
     "crypto": "^1.0.1",
     "forever": "^3.0.4",

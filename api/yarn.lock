@@ -983,6 +983,11 @@ camelcase@^2.0.1:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
   integrity sha1-fB0W1nmhu+WcoCys7PsBHiAfWh8=
 
+ccxt@^1.49.13:
+  version "1.49.13"
+  resolved "https://registry.yarnpkg.com/ccxt/-/ccxt-1.49.13.tgz#7dff3b501195219dbfcd1836a7c7911a64b87ec2"
+  integrity sha512-rWzgzY9HE7AywDJci6qpRQBKk0qFEgBwklxnecFUPwpxK4JwC5FMZwY3jWhT489BPaHZtbjh0dCmvl8/sz5UNg==
+
 chalk@^2.0.0:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"

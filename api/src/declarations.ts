@@ -2,6 +2,7 @@ export namespace Constants {
     export enum Source {
         Nomics = 0,
         Bittrex = 1,
+        Binance = 2,
     }
 }
 

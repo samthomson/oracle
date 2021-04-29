@@ -10,7 +10,7 @@ export const createLogEntry: any = (source: Types.ExchangeSource) =>
         source,
     })
 
-export const ensureBittrexMarketExistsAs: any = async (market: Types.ExchangeMarketComposite) => {
+export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMarketComposite, sourceId) => {
     const {
         name,
         symbol,
@@ -26,7 +26,6 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.ExchangeMar
         precision,
     } = market
 
-    const sourceId = Types.Constants.Source.Bittrex
     const newData = {
         sourceId,
         name,
@@ -44,11 +43,12 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.ExchangeMar
     }
 
     // create or update
-    const marketAlreadyExisting = await Models.Market.findOne({ where: { name } })
+    const marketAlreadyExisting = await Models.Market.findOne({ where: { sourceId, name } })
 
     if (marketAlreadyExisting) {
         await Models.Market.update(newData, {
             where: {
+                sourceId,
                 name,
             },
         })
