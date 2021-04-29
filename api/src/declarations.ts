@@ -2,6 +2,7 @@ export namespace Constants {
     export enum Source {
         Nomics = 0,
         Bittrex = 1,
+        Binance = 2,
     }
 }
 
@@ -145,7 +146,7 @@ export namespace Bittrex {
     }
 }
 
-export type BittrexMarketComposite = {
+export type ExchangeMarketComposite = {
     name: string
     quote: string
     symbol: string
@@ -160,7 +161,7 @@ export type BittrexMarketComposite = {
     precision: number
 }
 
-export interface DBMarketModelData extends BittrexMarketComposite {
+export interface DBMarketModelData extends ExchangeMarketComposite {
     sourceId: number
 }
 

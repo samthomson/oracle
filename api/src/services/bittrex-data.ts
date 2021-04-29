@@ -100,7 +100,7 @@ const bittrexRequestV3 = async (
     }
 }
 
-export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
+export const getValues = async (): Promise<Types.ExchangeMarketComposite[]> => {
     try {
         const bittrexMarkets: Types.Bittrex.Market[] = (await bittrexRequestV3('markets')).payload
         const bittrexSummaries: Types.Bittrex.MarketSummary[] = (await bittrexRequestV3('markets/summaries')).payload
@@ -132,7 +132,7 @@ export const getValues = async (): Promise<Types.BittrexMarketComposite[]> => {
             return keyed
         })()
 
-        const compositeMarkets: Types.BittrexMarketComposite[] = bittrexMarkets
+        const compositeMarkets: Types.ExchangeMarketComposite[] = bittrexMarkets
             // active markets only
             .filter((market) => market.status === 'ONLINE')
             .map((market) => {

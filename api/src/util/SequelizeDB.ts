@@ -10,7 +10,7 @@ export const createLogEntry: any = (source: Types.ExchangeSource) =>
         source,
     })
 
-export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMarketComposite) => {
+export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMarketComposite, sourceId) => {
     const {
         name,
         symbol,
@@ -26,7 +26,6 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMark
         precision,
     } = market
 
-    const sourceId = Types.Constants.Source.Bittrex
     const newData = {
         sourceId,
         name,
@@ -44,11 +43,12 @@ export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMark
     }
 
     // create or update
-    const marketAlreadyExisting = await Models.Market.findOne({ where: { name } })
+    const marketAlreadyExisting = await Models.Market.findOne({ where: { sourceId, name } })
 
     if (marketAlreadyExisting) {
         await Models.Market.update(newData, {
             where: {
+                sourceId,
                 name,
             },
         })
@@ -168,7 +168,9 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
     // @ts-ignore
     const markets: Types.DBMarketModelData[] = (
         await Models.Market.findAll({
-            where: { sourceId: 1 },
+            where: {
+                [Sequelize.Op.or]: [{ sourceId: 1 }, { sourceId: 2 }],
+            },
             include: [
                 {
                     model: Models.CrunchedMarketData,
