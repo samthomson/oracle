@@ -168,7 +168,9 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
     // @ts-ignore
     const markets: Types.DBMarketModelData[] = (
         await Models.Market.findAll({
-            where: { sourceId: 1 },
+            where: {
+                [Sequelize.Op.or]: [{ sourceId: 1 }, { sourceId: 2 }],
+            },
             include: [
                 {
                     model: Models.CrunchedMarketData,
