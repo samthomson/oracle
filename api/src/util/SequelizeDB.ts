@@ -10,7 +10,7 @@ export const createLogEntry: any = (source: Types.ExchangeSource) =>
         source,
     })
 
-export const ensureBittrexMarketExistsAs: any = async (market: Types.BittrexMarketComposite) => {
+export const ensureBittrexMarketExistsAs: any = async (market: Types.ExchangeMarketComposite) => {
     const {
         name,
         symbol,

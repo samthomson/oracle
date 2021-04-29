@@ -9,7 +9,7 @@ import Logger from '../services/logging'
 export const pullBittrexData = async () => {
     const startTime = moment()
     // pull all currency data
-    const bittrexComposites: Types.BittrexMarketComposite[] = await BittrexService.getValues()
+    const bittrexComposites: Types.ExchangeMarketComposite[] = await BittrexService.getValues()
 
     // create an initial log entry in the db, so we have an id to relate other models against
     const logEntry = await DBUtil.createLogEntry(Types.Constants.Source.Bittrex)
