@@ -7,6 +7,7 @@ export const importCrunch = async (shortMAsNotLong = true) => {
     try {
         const startTime = moment()
         await DataImporter.pullBittrexData()
+        await DataImporter.pullBinanceData()
         await DataCruncher.crunchBittrexMarkets(shortMAsNotLong)
 
         const endTime = moment()
