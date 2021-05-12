@@ -10,7 +10,7 @@
     "import-bittrex": "ts-node src/run-bittrex-once.ts",
     "import-binance": "ts-node src/tasks/run-binance-once.ts",
     "crunch-bittrex": "ts-node src/crunch-data.ts",
-    "import-crunch-bittrex": "ts-node src/tasks/import-crunch-bittrex.ts",
+    "import-crunch-markets": "ts-node src/tasks/import-crunch-markets.ts",
     "log-data-ages": "ts-node src/tasks/log-data-ages.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
