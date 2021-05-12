@@ -16,13 +16,14 @@ Find the currency in the db by doing a LIKE query on `currency.name`. Look at pr
 1. `cp .env.sample .env` and fill in values
 `docker-compose build`
 2. `docker-compose run api yarn --silent`
+3. `docker-compose run api yarn run migrate`
 
 ## 3.0 work on
 
 `docker-compose up`
 
-api: `//localhost:3100`
-phpmyadmin: `//localhost:3100`
+- api: `//localhost:3800`
+- phpmyadmin: `//localhost:8082`
 
 ### 3.1 handy scripts
 
