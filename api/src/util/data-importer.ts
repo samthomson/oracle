@@ -20,10 +20,6 @@ export const pullBittrexData = async (): Promise<void> => {
         await DBUtil.createCurrencyEntry(market.id, logEntry.id, bittrexComposites[i].lastTradeRate)
     }
 
-    // wrap up our log entry with the amount of currency entries created
-    logEntry.currenciesSaved = bittrexComposites.length
-    logEntry.save()
-
     const endTime = moment()
     const milliseconds = endTime.diff(startTime)
     const perMarket = milliseconds / bittrexComposites.length
@@ -32,6 +28,11 @@ export const pullBittrexData = async (): Promise<void> => {
             bittrexComposites.length
         }`,
     )
+
+    // wrap up our log entry with the amount of currency entries created
+    logEntry.currenciesSaved = bittrexComposites.length
+    logEntry.timeSpent = milliseconds
+    logEntry.save()
 }
 
 export const pullBinanceData = async (): Promise<void> => {
@@ -48,10 +49,6 @@ export const pullBinanceData = async (): Promise<void> => {
         await DBUtil.createCurrencyEntry(market.id, logEntry.id, binanceComposites[i].lastTradeRate)
     }
 
-    // wrap up our log entry with the amount of currency entries created
-    logEntry.currenciesSaved = binanceComposites.length
-    logEntry.save()
-
     const endTime = moment()
     const milliseconds = endTime.diff(startTime)
     const perMarket = milliseconds / binanceComposites.length
@@ -60,4 +57,9 @@ export const pullBinanceData = async (): Promise<void> => {
             binanceComposites.length
         }`,
     )
+
+    // wrap up our log entry with the amount of currency entries created
+    logEntry.currenciesSaved = binanceComposites.length
+    logEntry.timeSpent = milliseconds
+    logEntry.save()
 }

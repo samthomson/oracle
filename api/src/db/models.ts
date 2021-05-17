@@ -17,6 +17,10 @@ export const LogEntry = Database.define(
             type: Sequelize.SMALLINT.UNSIGNED,
             allowNull: false,
         },
+        timeSpent: {
+            type: Sequelize.INTEGER.UNSIGNED,
+            allowNull: true,
+        },
     },
     {
         timestamps: true,
