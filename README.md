@@ -46,6 +46,8 @@ test migration SQL here https://www.eversql.com/sql-syntax-check-validator/
 
 ## 4.0 deploy
 
+Due to constant DB writes, it requires a certain level of CPU power. Currently running on Digital Ocean Basic 2GB with 2 vCPUs.
+
 ### 4.1 initial deploy
 
 1. if not done already:
@@ -77,3 +79,20 @@ The prod docker-compose maps the log directory from the container to the host. S
 
 maybe later:
 - replace sequelize with TypeORM
+
+# 6.0 Speed optimizing
+
+It's too slow at present. Data is not being recorded/crunched fast enough, such that crunched MAs for currencies are lagging (by hours in cases).
+
+Data ages are calculated around once a minute, and stored in the `data_ages` table.
+When seeking to optimize speeds:
+- this `data_ages` table can serve as a benchmark.
+- check digital ocean droplet CPU usage
+- check `log_entry` table to ensure currencies are being stored per entry.
+- check `log_entry` table to see time spent crunching.
+
+Ideas:
+- spec up VPS
+- start culling old data points. (just keep last data point for a day, for days older than X days)
+- track time taken to crunch data and don't try to crunch data more frequently than this.
+- limit the markets being tracked (currently tracking/crunching many markets that I have no intention to trade in)
