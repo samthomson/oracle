@@ -13,6 +13,7 @@
     "import-crunch-markets": "ts-node src/task-runners/import-crunch-markets.ts",
     "log-data-ages": "ts-node src/task-runners/log-data-ages.ts",
     "report-filtered-markets": "ts-node src/task-runners/report-filtered-markets.ts",
+    "data-clean": "ts-node src/task-runners/run-data-clean.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "type-check": "tsc --noEmit",
     "forever": "forever start -c ts-node ./src/pseudo-cron.ts",
