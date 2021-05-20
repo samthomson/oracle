@@ -1,6 +1,6 @@
 import { CronJob } from 'cron'
-import * as ImportCrunch from './tasks/import-crunch-markets'
-import * as LogDataAges from './tasks/log-data-ages'
+import * as ImportCrunch from './util/data-importer'
+import * as DataAgesUtil from './util/data-ages'
 
 // every hour: calculate ten hour MA
 const hourly = '0 * * * *'
@@ -12,4 +12,4 @@ new CronJob(everyFewMinutes, () => ImportCrunch.importCrunch(true), undefined, t
 
 // log data ages
 const everyMinute = '* * * * *'
-new CronJob(everyMinute, () => LogDataAges.logDataAges(), undefined, true, 'Europe/London')
+new CronJob(everyMinute, () => DataAgesUtil.logDataAges(), undefined, true, 'Europe/London')

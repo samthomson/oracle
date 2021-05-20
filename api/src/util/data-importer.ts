@@ -5,6 +5,7 @@ import * as BittrexService from '../services/bittrex-data'
 import * as MarketData from '../services/market-data'
 import * as DBUtil from './SequelizeDB'
 import * as HelperUtil from '../util/helper'
+import * as DataCruncher from '../util/data-cruncher'
 import Logger from '../services/logging'
 
 export const pullBittrexData = async (): Promise<void> => {
@@ -62,4 +63,22 @@ export const pullBinanceData = async (): Promise<void> => {
     logEntry.currenciesSaved = binanceComposites.length
     logEntry.timeSpent = milliseconds
     logEntry.save()
+}
+
+export const importCrunch = async (shortMAsNotLong = true) => {
+    try {
+        const startTime = moment()
+        await pullBittrexData()
+        await pullBinanceData()
+        await DataCruncher.crunchBittrexMarkets(shortMAsNotLong)
+
+        const endTime = moment()
+        const milliseconds = endTime.diff(startTime)
+
+        Logger.info(`3. time spent importing & crunching bittrex markets: ${milliseconds.toLocaleString()} ms`, {
+            shortMAsNotLong,
+        })
+    } catch (err) {
+        Logger.error('error importing and crunching bittrex data', err)
+    }
 }
