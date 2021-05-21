@@ -249,3 +249,49 @@ SELECT market.quote, market.symbol, crunched_market_data.ma_thirty_min, crunched
 
 SELECT count(market.id) as healthyBittrexMarkets FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.source_id = 1 AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE 
 */
+
+export const getOldSuperfluousLogEntries = async (): Promise<Types.OldEntry[]> => {
+    const oldExcessQuery = `
+    SELECT * FROM (
+        SELECT log_entry.id, log_entry.source, date(log_entry.created_at) as date, t2.counted 
+        FROM log_entry 
+        JOIN (select count(*) as counted, created_at, source from log_entry group by date(created_at), source ) t2 ON date(t2.created_at) = date(log_entry.created_at) AND t2.source = log_entry.source AND id in (SELECT max(id) FROM log_entry 
+        WHERE DATE(log_entry.created_at) < DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+        GROUP BY DATE(created_at), source) 
+        ORDER BY id desc 
+        LIMIT 1000 
+    ) query WHERE query.counted > 1 LIMIT 1000
+    `
+    
+    const excessResult: Types.OldEntry[] = await SequelizeDB.query(oldExcessQuery, { type: Sequelize.QueryTypes.SELECT })
+
+    return excessResult
+}
+
+export const deleteOtherEntriesForDateAndSource = async (idToKeep: number, source: number, date: string) => {
+
+    // select all where source matches, date matches, and id doesn't match.
+    const selectQuery = `SELECT id FROM log_entry WHERE DATE(created_at) = '${date}' AND source = ${source} AND id <> ${idToKeep}`
+    const excessEntries = (await SequelizeDB.query(selectQuery, { type: Sequelize.QueryTypes.SELECT })).map((obj: { id: number}) => obj.id)
+
+
+    for (let j = 0; j < excessEntries.length; j++) {
+        deleteLogEntryAndAssociatedMarketEntries(excessEntries[j])
+    }
+}
+
+export const deleteLogEntryAndAssociatedMarketEntries = async (logEntryId: number) => {    
+    // delete market entries
+    await Models.MarketEntry.destroy({
+        where: {
+            logEntryId
+        },
+    })
+
+    // delete log entry
+    await Models.LogEntry.destroy({
+        where: {
+            id: logEntryId
+        },
+    })
+}

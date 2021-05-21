@@ -196,3 +196,10 @@ export type APIRequestStat = {
     lastDayCount: number
     lastMonthCount: number
 }
+
+export type OldEntry = {
+    id: number
+    source: number
+    date: string
+    counted: number
+}
