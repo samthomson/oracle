@@ -1,5 +1,4 @@
 import * as Types from '../declarations'
-import * as BittrexService from '../services/bittrex-data'
 import * as MarketData from '../services/market-data'
 
 const filterComposites = (markets: Types.ExchangeMarketComposite[]) => {
@@ -19,7 +18,7 @@ const filterComposites = (markets: Types.ExchangeMarketComposite[]) => {
 
 export const filterMarkets = async () => {
 
-    const bittrexComposites: Types.ExchangeMarketComposite[] = await BittrexService.getValues()
+    const bittrexComposites: Types.ExchangeMarketComposite[] = await MarketData.getBittrexMarketComposites()
     const binanceComposites: Types.ExchangeMarketComposite[] = await MarketData.getBinanceMarketComposites()
 
 	console.log(filterComposites(bittrexComposites))

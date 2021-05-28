@@ -1,7 +1,7 @@
 import moment from 'moment'
 import * as Types from '../declarations'
 import * as NomicsService from '../services/nomics-data'
-import * as BittrexService from '../services/bittrex-data'
+import * as BittrexService from './bittrex'
 import * as MarketData from '../services/market-data'
 import * as DBUtil from './SequelizeDB'
 import * as HelperUtil from '../util/helper'
@@ -11,7 +11,7 @@ import Logger from '../services/logging'
 export const pullBittrexData = async (): Promise<void> => {
     const startTime = moment()
     // pull all currency data
-    const bittrexComposites: Types.ExchangeMarketComposite[] = await BittrexService.getValues()
+    const bittrexComposites: Types.ExchangeMarketComposite[] = await MarketData.getBittrexMarketComposites()
 
     // create an initial log entry in the db, so we have an id to relate other models against
     const logEntry = await DBUtil.createLogEntry(Types.Constants.Source.Bittrex)

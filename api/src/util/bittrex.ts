@@ -1,8 +1,8 @@
 import * as crypto from 'crypto'
 import fetch from 'node-fetch'
 import * as Types from '../declarations'
-import Logger from './logging'
-import * as HelperUtil from '../util/helper'
+import Logger from '../services/logging'
+import * as HelperUtil from './helper'
 import * as MarketData from '../services/market-data'
 
 const { BITTREX_API_KEY, BITTREX_API_SECRET } = process.env
@@ -13,7 +13,7 @@ const hmac = (key: string, data: string) => {
     return hash.digest('hex')
 }
 
-const bittrexRequestV3 = async (
+export const bittrexRequestV3 = async (
     apiRoute: string,
     method = 'GET',
     variables: { [key: string]: string | number } = {},
@@ -101,83 +101,3 @@ const bittrexRequestV3 = async (
     }
 }
 
-export const getValues = async (): Promise<Types.ExchangeMarketComposite[]> => {
-    try {
-        const bittrexMarkets: Types.Bittrex.Market[] = (await bittrexRequestV3('markets')).payload
-        const bittrexSummaries: Types.Bittrex.MarketSummary[] = (await bittrexRequestV3('markets/summaries')).payload
-        const bittrexTickers: Types.Bittrex.MarketTicker[] = (await bittrexRequestV3('markets/tickers')).payload
-
-        const keyedSummaries = (() => {
-            const keyed = {}
-            for (let i = 0; i < bittrexSummaries.length; i++) {
-                const { symbol, high, low, quoteVolume } = bittrexSummaries[i]
-                keyed[symbol] = {
-                    high,
-                    low,
-                    quoteVolume,
-                }
-            }
-            return keyed
-        })()
-
-        const keyedTickers = (() => {
-            const keyed = {}
-            for (let i = 0; i < bittrexTickers.length; i++) {
-                const { symbol, lastTradeRate, bidRate, askRate } = bittrexTickers[i]
-                keyed[symbol] = {
-                    lastTradeRate,
-                    bidRate,
-                    askRate,
-                }
-            }
-            return keyed
-        })()
-
-        const compositeMarkets: Types.ExchangeMarketComposite[] = bittrexMarkets
-            // active markets only
-            .filter((market) => market.status === 'ONLINE')
-            .map((market) => {
-                const {
-                    symbol: name,
-                    baseCurrencySymbol: symbol,
-                    quoteCurrencySymbol: quote,
-                    minTradeSize,
-                    status,
-                    precision,
-                } = market
-                const summary = keyedSummaries[name]
-                const ticker = keyedTickers[name]
-
-                if (!summary) {
-                    Logger.warn('summary not defined', market)
-                }
-                if (!ticker) {
-                    Logger.warn('ticker not defined', market)
-                }
-
-                if (ticker && summary) {
-                    return {
-                        name,
-                        symbol,
-                        quote,
-                        minTradeSize: Number(minTradeSize),
-                        status,
-                        precision: Number(precision),
-                        high: Number(summary.high),
-                        low: Number(summary.low),
-                        quoteVolume: Number(summary.quoteVolume),
-                        lastTradeRate: Number(ticker.lastTradeRate),
-                        bidRate: Number(ticker.bidRate),
-                        askRate: Number(ticker.askRate),
-                    }
-                }
-            })
-            // filter out undefined (where summary or ticker was not set)
-            .filter((market) => market)
-            
-        return MarketData.deduceAndAddUSDVolumeToComposites(compositeMarkets)
-    } catch (err) {
-        Logger.error('error assembling bittrex data', err)
-        return []
-    }
-}

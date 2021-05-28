@@ -1,7 +1,8 @@
 import * as Types from '../declarations'
 import * as DBUtil from '../util/SequelizeDB'
-import * as BittrexData from '../services/bittrex-data'
+import * as BittrexData from '../util/bittrex'
 import * as DataCruncher from '../util/data-cruncher'
+import * as MarketData from '../services/market-data'
 import * as DataAges from '../util/data-ages'
 import * as HelperUtil from '../util/helper'
 
@@ -84,7 +85,7 @@ const resolveLatestPrice = async (currency) => {
 
 export const debug = async () => {
     const output = 'result'
-    const data = await BittrexData.getValues()
+    const data = await MarketData.getBittrexMarketComposites()
     return {
         output,
     }
