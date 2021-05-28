@@ -155,6 +155,7 @@ export type ExchangeMarketComposite = {
     high: number
     low: number
     quoteVolume: number
+    volumeUSD?: number
     lastTradeRate: number
     bidRate: number
     askRate: number

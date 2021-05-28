@@ -3,6 +3,7 @@ import fetch from 'node-fetch'
 import * as Types from '../declarations'
 import Logger from './logging'
 import * as HelperUtil from '../util/helper'
+import * as MarketData from '../services/market-data'
 
 const { BITTREX_API_KEY, BITTREX_API_SECRET } = process.env
 
@@ -173,8 +174,8 @@ export const getValues = async (): Promise<Types.ExchangeMarketComposite[]> => {
             })
             // filter out undefined (where summary or ticker was not set)
             .filter((market) => market)
-
-        return compositeMarkets
+            
+        return MarketData.deduceAndAddUSDVolumeToComposites(compositeMarkets)
     } catch (err) {
         Logger.error('error assembling bittrex data', err)
         return []

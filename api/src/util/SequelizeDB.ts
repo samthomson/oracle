@@ -25,6 +25,7 @@ export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMa
         bidRate,
         askRate,
         precision,
+        volumeUSD
     } = market
 
     const newData = {
@@ -41,6 +42,7 @@ export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMa
         bidRate,
         askRate,
         precision,
+        volumeUSD
     }
 
     // create or update
@@ -208,7 +210,7 @@ export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
             sourceId: 1,
         },
     })
-    const healthyQuery = `SELECT count(market.id) as healthyBittrexMarkets FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.source_id = 1 AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE`
+    const healthyQuery = `SELECT count(market.id) as healthyBittrexMarkets FROM market JOIN crunched_market_data ON crunched_market_data.market_id = market.id WHERE market.volume_usd > 60000 AND crunched_market_data.ma_instant IS NOT NULL AND crunched_market_data.ma_thirty_min IS NOT NULL AND crunched_market_data.ma_ten_hour IS NOT NULL AND crunched_market_data.last_updated >= NOW() - INTERVAL 5 MINUTE`
     const healthyQueryResult = await SequelizeDB.query(healthyQuery, { type: Sequelize.QueryTypes.SELECT })
 
     // @ts-ignore

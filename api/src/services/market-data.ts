@@ -2,6 +2,34 @@ import * as ccxt from 'ccxt'
 import * as Types from '../declarations'
 import Logger from './logging'
 
+export const deduceAndAddUSDVolumeToComposites = (compositeMarkets: Types.ExchangeMarketComposite[]) => {
+    const usdMarkets = compositeMarkets.filter(market => market.quote === 'USDT' && (market.symbol === 'ETH' || market.symbol === 'BTC'))
+
+    const ethUSD = usdMarkets.find(market => market.symbol === 'ETH')?.lastTradeRate
+    const btcUSD = usdMarkets.find(market => market.symbol === 'BTC')?.lastTradeRate
+
+    const compositeMarketsWithUSDVolume = compositeMarkets.map(market => {
+        let volumeUSD = undefined
+        switch (market.quote) {
+            case 'BTC':
+                volumeUSD = market.quoteVolume * btcUSD
+                    break;
+            case 'ETH':
+                volumeUSD = market.quoteVolume * ethUSD
+                break;
+            case 'USDT':
+                volumeUSD = market.quoteVolume
+                break;
+        }
+        return {
+            ...market,
+            volumeUSD
+        }
+    })
+
+    return compositeMarketsWithUSDVolume
+}
+
 export const getBinanceMarketComposites = async (): Promise<Types.ExchangeMarketComposite[]> => {
     const binanceExchange = new ccxt.binance()
 
@@ -60,5 +88,6 @@ export const getBinanceMarketComposites = async (): Promise<Types.ExchangeMarket
         // filter out undefined (where summary or ticker was not set)
         .filter((market) => market)
 
-    return compositeMarkets
+    // return compositeMarkets
+    return deduceAndAddUSDVolumeToComposites(compositeMarkets)
 }

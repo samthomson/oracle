@@ -1,15 +1,24 @@
 import moment from 'moment'
+import Sequelize from 'sequelize'
 import * as Types from '../declarations'
 import * as DBUtil from './SequelizeDB'
 import * as Models from '../db/models'
 import * as HelperUtil from '../util/helper'
 import Logger from '../services/logging'
 
-export const crunchBittrexMarkets = async (shortMAsNotLong = true) => {
+export const crunchMarkets = async (shortMAsNotLong = true) => {
     try {
         const startTime = moment()
         // get all bittrex markets
-        const markets = await Models.Market.findAll({ limit: 1000, where: { sourceId: 1 } })
+        const markets = await Models.Market.findAll({ 
+            limit: 2000,
+            where: {
+                // sourceId: 1,
+                volumeUSD: {
+                    [Sequelize.Op.gte]: 60000
+                }
+            }
+        })
 
         // for each market crunch an MA
         for (let i = 0; i < markets.length; i++) {
@@ -34,7 +43,6 @@ export const crunchBittrexMarkets = async (shortMAsNotLong = true) => {
 
                 lastUpdated: moment.now(),
             }
-            // console.log('new data', { ...newData, fifteenMinutesPrices })
 
             // for all crunched data - find CrunchedMarketData record and update or create new
             const [crunchedData, created] = await Models.CrunchedMarketData.findOrCreate({
@@ -77,7 +85,7 @@ export const crunchBittrexMarkets = async (shortMAsNotLong = true) => {
         const milliseconds = endTime.diff(startTime)
         const perMarket = milliseconds / markets.length
         Logger.info(
-            `2. time spent crunching bittrex markets' MAs: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
+            `2. time spent crunching markets' MAs: ${milliseconds.toLocaleString()} ms (${perMarket} per market - ${
                 markets.length
             }`,
         )

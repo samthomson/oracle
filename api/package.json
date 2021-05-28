@@ -9,7 +9,7 @@
     "import-nomics": "ts-node src/task-runners/run-nomics-once.ts",
     "import-bittrex": "ts-node src/task-runners/run-bittrex-once.ts",
     "import-binance": "ts-node src/task-runners/run-binance-once.ts",
-    "crunch-bittrex": "ts-node src/crunch-data.ts",
+    "crunch-markets": "ts-node src/crunch-data.ts",
     "import-crunch-markets": "ts-node src/task-runners/import-crunch-markets.ts",
     "log-data-ages": "ts-node src/task-runners/log-data-ages.ts",
     "report-filtered-markets": "ts-node src/task-runners/report-filtered-markets.ts",
