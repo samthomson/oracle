@@ -51,6 +51,10 @@ export const Market = Database.define(
         high: Sequelize.DECIMAL(32, 12),
         low: Sequelize.DECIMAL(32, 12),
         quoteVolume: Sequelize.DECIMAL(32, 12),
+        volumeUSD: {
+            type: Sequelize.DECIMAL(32, 12),
+            field: 'volume_usd'
+        },
         lastTradeRate: Sequelize.DECIMAL(32, 12),
         bidRate: Sequelize.DECIMAL(32, 12),
         askRate: Sequelize.DECIMAL(32, 12),
