@@ -173,6 +173,7 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
         await Models.Market.findAll({
             where: {
                 [Sequelize.Op.or]: [{ sourceId: 1 }, { sourceId: 2 }],
+                volumeUSD: { [Sequelize.Op.gte]: 60000 }
             },
             include: [
                 {
