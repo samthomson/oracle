@@ -102,3 +102,21 @@ export const requestLogs = async () => {
         items: APIStats,
     }
 }
+
+export const getGlobals = async () => {
+
+    const markets = await DBUtil.getMarkets()
+
+    // filter markets to find btc and eth prices
+    const eth = markets.find(market => market.quote === 'USDT' && market.symbol === 'ETH')
+    const btc = markets.find(market => market.quote === 'USDT' && market.symbol === 'BTC')
+
+    const btcPriceInUSD = btc.lastTradeRate
+    const ethPriceInUSD = eth.lastTradeRate
+
+
+    return {
+        btcPriceInUSD,
+        ethPriceInUSD
+    }
+}

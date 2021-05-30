@@ -82,6 +82,11 @@ const typeDefs = gql`
         dataAges: DataAges
     }
 
+    type GlobalsResult {
+        btcPriceInUSD: Float
+        ethPriceInUSD: Float
+    }
+
     type RecentlyCrunchedMarkets {
         bittrex: Float
     }
@@ -116,6 +121,7 @@ const typeDefs = gql`
         currency(input: CurrencyQueryInput): Currency
         debug: DebugResult
         markets: MarketsResult
+        globals: GlobalsResult
         health: Health
         requestLogs: RequestLogs
     }
@@ -126,6 +132,7 @@ const resolvers = {
         currencies: Resolvers.getCurrencies,
         debug: Resolvers.debug,
         markets: Resolvers.getMarkets,
+        globals: Resolvers.getGlobals,
         health: Resolvers.health,
         requestLogs: Resolvers.requestLogs,
     },
