@@ -1,9 +1,14 @@
 # oracle
 
+A crypto currency moving average service. It logs prices at frequent intervals, and can then determine a moving average for a frequency and period on demand. It also calculates a short and long moving average constantly, such that a latest moving average can always be queried without the small delay of calculating it fresh (useful when querying many currencies' moving averages.)
+
+Originally built around nomics api data, now it polls exchanges directly (currently bittrex and binance).
+
 ## 1.0 how it works
 
-- call [nomics](https://nomics.com/docs/) every x (five) minutes to get all currency prices, store in db.
-- expose gql api containing moving averages. These can be calculated on the fly by looking at the pricing data in db.
+- call exchange every x minutes to get all currency prices, store in db.
+- calculate a short and long moving average for each currency every y minutes and store in db.
+- expose gql api containing currency data (latest market status from exchange, latest calculated moving averages, on demand moving average). 
 
 ### nomics mappings
 
@@ -65,24 +70,9 @@ The prod docker-compose maps the log directory from the container to the host. S
 
 `bash ./bash/download-logs.sh` (to `/serverlogs`)
 
-
-## 5.0 todo
-
-- expose gql endpoint
-	- moving average for a single currency
-	- moving average per multiple currency
-	- latest price per currency, single and as one of many
-- crunch MAs on the fly
-- add logging for errors
-- download logs script
-- make a month view of number of currencies pulled per day (would be candlestick for min-max)
-
-maybe later:
-- replace sequelize with TypeORM
-
 # 6.0 Speed optimizing
 
-It's too slow at present. Data is not being recorded/crunched fast enough, such that crunched MAs for currencies are lagging (by hours in cases).
+It's too slow at present and this constraint has prevented adding more exchanges/markets. Data is not being recorded/crunched fast enough, such that crunched MAs for currencies are lagging (by hours in cases).
 
 Data ages are calculated around once a minute, and stored in the `data_ages` table.
 When seeking to optimize speeds:
@@ -90,9 +80,3 @@ When seeking to optimize speeds:
 - check digital ocean droplet CPU usage
 - check `log_entry` table to ensure currencies are being stored per entry.
 - check `log_entry` table to see time spent crunching.
-
-Ideas:
-- spec up VPS
-- start culling old data points. (just keep last data point for a day, for days older than X days)
-- track time taken to crunch data and don't try to crunch data more frequently than this.
-- limit the markets being tracked (currently tracking/crunching many markets that I have no intention to trade in)
