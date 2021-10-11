@@ -140,7 +140,18 @@ const resolvers = {
 
 // The ApolloServer constructor requires two parameters: your schema
 // definition and your set of resolvers.
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    formatError: (err) => {
+        // log internal - issues with my code - errors
+        if (err.extensions.code === 'INTERNAL_SERVER_ERROR') {
+            Logger.error(err)
+        }
+        // return underlying error - to client - either way
+        return err
+    },
+})
 
 // needed so that relations are defined since sequelize is awkward
 
