@@ -8,11 +8,12 @@ import * as HelperUtil from '../util/helper'
 
 export const getCurrencies = async (parent: any, args: any, context: any, info: any) => {
     const rawCurrencies = await DBUtil.getCurrencies()
+    const items = rawCurrencies.map((currency) => ({
+        ...currency,
+        movingAverage: async (parent) => await resolveMovingAverage(parent, currency),
+    }))
     return {
-        items: rawCurrencies.map((currency) => ({
-            ...currency,
-            movingAverage: async (parent) => await resolveMovingAverage(parent, currency),
-        })),
+        items,
         pageInfo: {
             totalItems: rawCurrencies.length,
         },
@@ -104,19 +105,17 @@ export const requestLogs = async () => {
 }
 
 export const getGlobals = async () => {
-
     const markets = await DBUtil.getMarkets()
 
     // filter markets to find btc and eth prices
-    const eth = markets.find(market => market.quote === 'USDT' && market.symbol === 'ETH')
-    const btc = markets.find(market => market.quote === 'USDT' && market.symbol === 'BTC')
+    const eth = markets.find((market) => market.quote === 'USDT' && market.symbol === 'ETH')
+    const btc = markets.find((market) => market.quote === 'USDT' && market.symbol === 'BTC')
 
     const btcPriceInUSD = btc.lastTradeRate
     const ethPriceInUSD = eth.lastTradeRate
 
-
     return {
         btcPriceInUSD,
-        ethPriceInUSD
+        ethPriceInUSD,
     }
 }
