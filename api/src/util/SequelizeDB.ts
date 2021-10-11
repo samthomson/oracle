@@ -25,7 +25,7 @@ export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMa
         bidRate,
         askRate,
         precision,
-        volumeUSD
+        volumeUSD,
     } = market
 
     const newData = {
@@ -42,7 +42,7 @@ export const ensureExchangeMarketExistsAs: any = async (market: Types.ExchangeMa
         bidRate,
         askRate,
         precision,
-        volumeUSD
+        volumeUSD,
     }
 
     // create or update
@@ -173,7 +173,7 @@ export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
         await Models.Market.findAll({
             where: {
                 [Sequelize.Op.or]: [{ sourceId: 1 }, { sourceId: 2 }],
-                volumeUSD: { [Sequelize.Op.gte]: 60000 }
+                volumeUSD: { [Sequelize.Op.gte]: 60000 },
             },
             include: [
                 {
@@ -265,36 +265,38 @@ export const getOldSuperfluousLogEntries = async (): Promise<Types.OldEntry[]> =
         LIMIT 1000 
     ) query WHERE query.counted > 1 LIMIT 1000
     `
-    
-    const excessResult: Types.OldEntry[] = await SequelizeDB.query(oldExcessQuery, { type: Sequelize.QueryTypes.SELECT })
+
+    const excessResult: Types.OldEntry[] = await SequelizeDB.query(oldExcessQuery, {
+        type: Sequelize.QueryTypes.SELECT,
+    })
 
     return excessResult
 }
 
 export const deleteOtherEntriesForDateAndSource = async (idToKeep: number, source: number, date: string) => {
-
     // select all where source matches, date matches, and id doesn't match.
     const selectQuery = `SELECT id FROM log_entry WHERE DATE(created_at) = '${date}' AND source = ${source} AND id <> ${idToKeep}`
-    const excessEntries = (await SequelizeDB.query(selectQuery, { type: Sequelize.QueryTypes.SELECT })).map((obj: { id: number}) => obj.id)
-
+    const excessEntries = (await SequelizeDB.query(selectQuery, { type: Sequelize.QueryTypes.SELECT })).map(
+        (obj: { id: number }) => obj.id,
+    )
 
     for (let j = 0; j < excessEntries.length; j++) {
         deleteLogEntryAndAssociatedMarketEntries(excessEntries[j])
     }
 }
 
-export const deleteLogEntryAndAssociatedMarketEntries = async (logEntryId: number) => {    
+export const deleteLogEntryAndAssociatedMarketEntries = async (logEntryId: number) => {
     // delete market entries
     await Models.MarketEntry.destroy({
         where: {
-            logEntryId
+            logEntryId,
         },
     })
 
     // delete log entry
     await Models.LogEntry.destroy({
         where: {
-            id: logEntryId
+            id: logEntryId,
         },
     })
 }
