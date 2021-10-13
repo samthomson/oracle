@@ -70,24 +70,16 @@ export const createCurrencyEntry: any = (marketId: number, logEntryId: number, p
     })
 }
 
-export const getCurrency = async ({
-    nomicsId,
+export const getMarket = async ({
     quote,
     symbol,
     sourceId,
-}: Types.CurrencyQueryInput): Promise<Types.Currency> => {
-    let whereQuery: any = { sourceId, quote }
+}: Types.CurrencyQueryInput): Promise<Types.APIMarketsQueryResult> => {
+    const whereQuery: any = { sourceId, quote, symbol }
 
     // we need a numeric sourceId and a quote at a minimum
     if (isNaN(sourceId) || !quote) {
         return undefined
-    }
-
-    if (nomicsId) {
-        whereQuery = { ...whereQuery, nomicsId }
-    }
-    if (symbol) {
-        whereQuery = { ...whereQuery, symbol }
     }
 
     const market = await Models.Market.findOne({
@@ -101,6 +93,9 @@ export const getCurrency = async ({
                 limit: 1,
                 order: [[Models.LogEntry, 'created_at', 'DESC']],
             },
+            {
+                model: Models.CrunchedMarketData,
+            },
         ],
     })
 
@@ -108,37 +103,14 @@ export const getCurrency = async ({
         ...market.get(),
         // @ts-ignore
         entries: market.market_entries,
+        // @ts-ignore
+        crunched: {
+            // @ts-ignore
+            ...market.crunched_market_datum.dataValues,
+            // @ts-ignore
+            lastUpdated: market.crunched_market_datum.dataValues.lastUpdated.toISOString(),
+        },
     }
-}
-
-export const getCurrencies = async (): Promise<Types.CurrenciesQueryResult[]> => {
-    // get latest log entry and associated currency prices
-    const logEntry = await Models.LogEntry.findOne({
-        include: [
-            {
-                model: Models.MarketEntry,
-                // @ts-ignore
-                include: Models.Currency,
-                limit: 20, // todo: replace this with pagination logic
-            },
-        ],
-        order: [['created_at', 'DESC']],
-    })
-
-    // @ts-ignore
-    return (logEntry?.market_entries ?? []).map((marketEntry) => {
-        return {
-            id: marketEntry.currencyId,
-            name: marketEntry.currency.name,
-            symbol: marketEntry.currency.symbol,
-            nomicsId: marketEntry.currency.nomicsId,
-            latestEntry: {
-                priceQuote: marketEntry.priceQuote,
-                // @ts-ignore
-                timeStamp: logEntry.createdAt.toISOString(),
-            },
-        }
-    })
 }
 
 export const getForMovingAverage = async (

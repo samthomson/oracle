@@ -3,33 +3,29 @@ import * as Resolvers from './resolvers'
 import * as Types from '../declarations'
 import Logger from '../services/logging'
 
+const marketTypeSharedFields = `
+    sourceId: Int
+    exchange: String
+    quote: String
+    symbol: String
+    minTradeSize: Float
+    status: String
+    high: Float
+    low: Float
+    quoteVolume: Float
+    lastTradeRate: Float
+    bidRate: Float
+    askRate: Float
+    precision: Float
+    crunched: CrunchedMarketData
+`
+
 const typeDefs = gql`
-    type Currency {
-        nomicsId: String
-        name: String
-        symbol: String
-        quote: String
-        # entries: [CurrencyEntry]
-        movingAverage(movingAverageInput: MovingAverageInput): Float
-        latestEntry: PriceEntry
-    }
 
-    type PriceEntry {
-        timeStamp: String
-        priceQuote: String
-    }
-
-    # type CurrencyEntry {
-    #     currencyId: String
-    #     logEntryId: String
-    #     priceQuote: String
-    # }
-
-    input CurrencyQueryInput {
-        symbol: String
-        nomicsId: String
+    input MarketQueryInput {
+        symbol: String!
         quote: String!
-        sourceId: Int
+        sourceId: Int!
     }
 
     input MovingAverageInput {
@@ -43,30 +39,17 @@ const typeDefs = gql`
         totalItems: Int!
     }
 
-    type CurrenciesResult {
-        items: [Currency]!
-        pageInfo: PaginationInfo
-    }
-
     type DebugResult {
         output: String
     }
 
     type MarketData {
-        sourceId: Int
-        exchange: String
-        quote: String
-        symbol: String
-        minTradeSize: Float
-        status: String
-        high: Float
-        low: Float
-        quoteVolume: Float
-        lastTradeRate: Float
-        bidRate: Float
-        askRate: Float
-        precision: Float
-        crunched: CrunchedMarketData
+        ${marketTypeSharedFields}
+    }
+
+    type SingleMarket {
+        ${marketTypeSharedFields}
+        movingAverage(movingAverageInput: MovingAverageInput): Float
     }
 
     type CrunchedMarketData {
@@ -117,8 +100,7 @@ const typeDefs = gql`
     }
 
     type Query {
-        currencies: CurrenciesResult
-        currency(input: CurrencyQueryInput): Currency
+        market(input: MarketQueryInput): SingleMarket
         debug: DebugResult
         markets: MarketsResult
         globals: GlobalsResult
@@ -128,13 +110,12 @@ const typeDefs = gql`
 `
 const resolvers = {
     Query: {
-        currency: Resolvers.getCurrency,
-        currencies: Resolvers.getCurrencies,
-        debug: Resolvers.debug,
+        market: Resolvers.getMarket,
         markets: Resolvers.getMarkets,
         globals: Resolvers.getGlobals,
         health: Resolvers.health,
         requestLogs: Resolvers.requestLogs,
+        debug: Resolvers.debug,
     },
 }
 
