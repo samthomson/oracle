@@ -23,10 +23,11 @@ services:
       - ./api:/api
     depends_on:
       - mysql
-    mem_limit: 1g
-    memswap_limit: 3g
-    cpuset: 0,1
-    cpus: ".5"
+    # mimic $5 DO vps to target performance
+    # mem_limit: 1g
+    # memswap_limit: 3g
+    # cpuset: 0,1
+    # cpus: ".5"
 
   mysql:
     image: mysql:5.7
@@ -39,10 +40,10 @@ services:
       - mysqldata:/var/lib/mysql
       - ./mysql/mycustom.cnf:/etc/mysql/conf.d/custom.cnf
     command: --sql-mode="STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION"
-    mem_limit: 1g
-    memswap_limit: 3g
-    cpuset: 0,1
-    cpus: ".5"
+    # mem_limit: 1g
+    # memswap_limit: 3g
+    # cpuset: 0,1
+    # cpus: ".5"
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
