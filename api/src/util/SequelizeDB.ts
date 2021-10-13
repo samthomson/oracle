@@ -207,7 +207,7 @@ export const getHealthData = async (): Promise<Types.HealthQueryResult> => {
               // @ts-ignore
               average: latestDataAge[0].crunchedAverage,
               // @ts-ignore
-              at: latestDataAge[0].datetime,
+              at: latestDataAge[0].datetime.toISOString(),
           }
         : undefined
 
