@@ -139,7 +139,7 @@ export const getForMovingAverage = async (
 }
 
 export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {
-    // hard coded to bittrex markets for now
+    // hard coded to bittrex/binance markets for now
     // @ts-ignore
     const markets: Types.DBMarketModelData[] = (
         await Models.Market.findAll({
