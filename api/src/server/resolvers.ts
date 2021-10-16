@@ -36,7 +36,7 @@ const resolveMovingAverage = async (parent, currency): Promise<Types.API.MovingA
         movingAverageInput: { periodLength, samples },
     } = parent
 
-    const dataPoints = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
+    const dataPoints = await DBUtil.getForMovingAverage(periodLength, samples, currency.id, currency.sourceId)
     const nonNullPrices = dataPoints.map((dataPoint) => dataPoint.value).filter((value) => value !== null)
 
     const average = nonNullPrices.length > 0 ? HelperUtil.calculateAverage(nonNullPrices) : null

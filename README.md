@@ -34,21 +34,26 @@ Find the currency in the db by doing a LIKE query on `currency.name`. Look at pr
 
 #### price data grouped in to periods with latest value per period shown
 
-```
-select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, currency.symbol, currency_entry.price_quote from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - 2400)/3600)*3600 + 2400) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN currency_entry on log_entry.id = currency_entry.log_entry_id join currency on currency_entry.currency_id = currency.id WHERE currency.symbol = 'ABBC' 
-```
-
+note:
+`log_entry.source = 1` and `market.id = '193` correspond to the market.
 ```
 SELECT periods.period, periods.created_at periodCreatedAt, log_entry.created_at AS logEntryCreatedAt, log_entry.id AS logEntryId, market.symbol, market_entry.price_quote 
 FROM log_entry 
 JOIN 
-(SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - 2160)/3600)*3600 + 2160) AS period, created_at, max(id) AS maxId, currencies_saved, count(1) AS c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId 
-JOIN market_entry on log_entry.id = market_entry.log_entry_id 
-JOIN market on market_entry.market_id = market.id 
-WHERE market.id = '1424' AND 
-period > NOW() - INTERVAL 600 MINUTE ORDER BY period DESC LIMIT 10;
+(
+	SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - 3180)/3600)*3600 + 3180) AS period, created_at, max(id) AS maxId, currencies_saved, count(1) AS c
+	FROM log_entry 
+	WHERE log_entry.source = 1 
+	GROUP BY period 
+	ORDER BY period DESC
+) periods 
+	ON log_entry.id = periods.maxId 
+JOIN market_entry ON log_entry.id = market_entry.log_entry_id 
+JOIN market ON market_entry.market_id = market.id 
+WHERE market.id = '193' AND period > NOW() - INTERVAL 600 MINUTE 
+ORDER BY period 
+DESC LIMIT 10; 
 ```
-
 #### latest price values for all currencies
 ```
 SELECT latestLogEntry.logId, latestLogEntry.logDate, currency.symbol, currency_entry.price_quote FROM (SELECT log_entry.id AS logId, log_entry.created_at AS logDate FROM log_entry ORDER BY created_at DESC LIMIT 1) latestLogEntry JOIN currency_entry ON latestLogEntry.logId = currency_entry.log_entry_id JOIN currency ON currency_entry.currency_id = currency.id LIMIT 5000

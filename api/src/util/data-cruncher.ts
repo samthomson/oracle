@@ -24,15 +24,15 @@ export const crunchMarkets = async (shortMAsNotLong = true) => {
         for (let i = 0; i < markets.length; i++) {
             const market = markets[i]
             // @ts-ignore
-            const { id: marketId } = market
+            const { id: marketId, sourceId } = market
             const halfHourPrices = shortMAsNotLong
-                ? await (await DBUtil.getForMovingAverage(3, 10, marketId))
+                ? await (await DBUtil.getForMovingAverage(3, 10, marketId, sourceId))
                       .map((price) => price.value)
                       .filter((val) => val !== null)
                 : undefined
             const tenHourPrices = shortMAsNotLong
                 ? undefined
-                : (await DBUtil.getForMovingAverage(60, 10, marketId))
+                : (await DBUtil.getForMovingAverage(60, 10, marketId, sourceId))
                       .map((price) => price.value)
                       .filter((val) => val !== null)
             // determine instantaneous moving average by taking last prices from already queried half hour price points

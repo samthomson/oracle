@@ -117,6 +117,7 @@ export const getForMovingAverage = async (
     periodLength: number, // minutes
     samples: number,
     marketId: number,
+    marketSourceId: number,
 ): Promise<Types.API.MovingAverageDataPoint[]> => {
     // frequency - the length of each period
     // eg 30 minutes would be 1800 (seconds)
@@ -128,7 +129,7 @@ export const getForMovingAverage = async (
     const sampleSpan = periodLength * samples
 
     const query = `
-    select periods.period, periods.created_at periodCreatedAt, log_entry.created_at as logEntryCreatedAt, log_entry.id as logEntryId, market.symbol, market_entry.price_quote from log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) as maxId, currencies_saved, count(1) as c from log_entry GROUP BY period ORDER BY period DESC) periods on log_entry.id = periods.maxId JOIN market_entry on log_entry.id = market_entry.log_entry_id join market on market_entry.market_id = market.id WHERE market.id = '${marketId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
+    SELECT periods.period, periods.created_at periodCreatedAt, log_entry.created_at AS logEntryCreatedAt, log_entry.id AS logEntryId, market.symbol, market_entry.price_quote FROM log_entry JOIN (SELECT FROM_UNIXTIME(FLOOR((UNIX_TIMESTAMP(created_at) - ${offSetSeconds})/${periodLengthSeconds})*${periodLengthSeconds} + ${offSetSeconds}) AS period, created_at, max(id) AS maxId, currencies_saved, count(1) AS c FROM log_entry WHERE log_entry.source = ${marketSourceId} GROUP BY period ORDER BY period DESC) periods ON log_entry.id = periods.maxId JOIN market_entry ON log_entry.id = market_entry.log_entry_id join market ON market_entry.market_id = market.id WHERE market.id = '${marketId}' AND period > NOW() - INTERVAL ${sampleSpan} MINUTE ORDER BY period DESC LIMIT ${samples} 
     `
 
     // @ts-ignore
