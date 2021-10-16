@@ -10,14 +10,14 @@ export const crunchMarkets = async (shortMAsNotLong = true) => {
     try {
         const startTime = moment()
         // get all bittrex markets
-        const markets = await Models.Market.findAll({ 
+        const markets = await Models.Market.findAll({
             limit: 2000,
             where: {
                 // sourceId: 1,
                 volumeUSD: {
-                    [Sequelize.Op.gte]: 60000
-                }
-            }
+                    [Sequelize.Op.gte]: 60000,
+                },
+            },
         })
 
         // for each market crunch an MA
@@ -25,8 +25,16 @@ export const crunchMarkets = async (shortMAsNotLong = true) => {
             const market = markets[i]
             // @ts-ignore
             const { id: marketId } = market
-            const halfHourPrices = shortMAsNotLong ? await DBUtil.getForMovingAverage(3, 10, marketId) : undefined
-            const tenHourPrices = shortMAsNotLong ? undefined : await DBUtil.getForMovingAverage(60, 10, marketId)
+            const halfHourPrices = shortMAsNotLong
+                ? await (await DBUtil.getForMovingAverage(3, 10, marketId))
+                      .map((price) => price.value)
+                      .filter((val) => val !== null)
+                : undefined
+            const tenHourPrices = shortMAsNotLong
+                ? undefined
+                : (await DBUtil.getForMovingAverage(60, 10, marketId))
+                      .map((price) => price.value)
+                      .filter((val) => val !== null)
             // determine instantaneous moving average by taking last prices from already queried half hour price points
             // prob update later when I start querying for prices more frequently - eg just take last ten prices when querying each minute, or 5 at one minute.
             // assuming prices are ordered chronologically

@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import * as Resolvers from './resolvers'
 import * as Types from '../declarations'
 import Logger from '../services/logging'
@@ -47,9 +48,27 @@ const typeDefs = gql`
         ${marketTypeSharedFields}
     }
 
+    type MovingAverageDataPoint {
+        value: Float
+        datetime: String
+    }
+
+    type MovingAverageInputSummary {
+        periodLength: Int
+        samples: Int
+        algorithm: String
+    }
+
+    type MovingAverage {
+        value: Float
+        input: MovingAverageInputSummary
+        dataPoints: [MovingAverageDataPoint]
+        confidence: Float
+    }
+
     type SingleMarket {
         ${marketTypeSharedFields}
-        movingAverage(movingAverageInput: MovingAverageInput): Float
+        movingAverage(movingAverageInput: MovingAverageInput): MovingAverage
     }
 
     type CrunchedMarketData {
@@ -132,6 +151,7 @@ const server = new ApolloServer({
         // return underlying error - to client - either way
         return err
     },
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 })
 
 // needed so that relations are defined since sequelize is awkward

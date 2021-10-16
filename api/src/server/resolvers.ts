@@ -31,15 +31,30 @@ export const getMarkets = async () => {
     }
 }
 
-const resolveMovingAverage = async (parent, currency): Promise<number | null> => {
+const resolveMovingAverage = async (parent, currency): Promise<Types.API.MovingAverage | null> => {
     const {
         movingAverageInput: { periodLength, samples },
     } = parent
 
-    // @ts-ignore
-    const prices = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
-    const average = prices.length > 0 ? HelperUtil.calculateAverage(prices) : null
-    return average
+    const dataPoints = await DBUtil.getForMovingAverage(periodLength, samples, currency.id)
+    const nonNullPrices = dataPoints.map((dataPoint) => dataPoint.value).filter((value) => value !== null)
+
+    const average = nonNullPrices.length > 0 ? HelperUtil.calculateAverage(nonNullPrices) : null
+
+    const confidence = (nonNullPrices.length / samples) * 100
+
+    const movingAverage: Types.API.MovingAverage = {
+        value: average,
+        input: {
+            periodLength,
+            samples,
+            algorithm: 'SimpleMovingAverage',
+        },
+        dataPoints,
+        confidence,
+    }
+
+    return movingAverage
 }
 
 export const debug = async () => {

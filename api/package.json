@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "apollo-server": "3",
+    "apollo-server-core": "^3.4.0",
     "app-root-path": "^3.0.0",
     "ccxt": "^1.49.13",
     "cron": "^1.8.2",

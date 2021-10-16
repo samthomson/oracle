@@ -204,3 +204,23 @@ export type OldEntry = {
     date: string
     counted: number
 }
+
+export namespace API {
+    export type MovingAverageInputSummary = {
+        periodLength: number
+        samples: number
+        algorithm: string
+    }
+
+    export type MovingAverageDataPoint = {
+        value: number
+        datetime: string
+    }
+
+    export type MovingAverage = {
+        value: number
+        input: MovingAverageInputSummary
+        dataPoints: MovingAverageDataPoint[]
+        confidence: number
+    }
+}
