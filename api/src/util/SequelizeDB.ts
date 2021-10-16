@@ -117,7 +117,7 @@ export const getForMovingAverage = async (
     periodLength: number, // minutes
     samples: number,
     marketId: number,
-): Promise<number[]> => {
+): Promise<Types.API.MovingAverageDataPoint[]> => {
     // frequency - the length of each period
     // eg 30 minutes would be 1800 (seconds)
     // offset = current minutes % period length
@@ -134,8 +134,12 @@ export const getForMovingAverage = async (
     // @ts-ignore
     const result = await SequelizeDB.query(query, { type: Sequelize.QueryTypes.SELECT })
 
-    // @ts-ignore
-    return result.map((row) => parseFloat(row.price_quote))
+    return result.map((row) => ({
+        // @ts-ignore
+        datetime: row.logEntryCreatedAt.toISOString(),
+        // @ts-ignore
+        value: parseFloat(row.price_quote),
+    }))
 }
 
 export const getMarkets = async (): Promise<Types.APIMarketsQueryResult[]> => {

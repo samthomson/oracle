@@ -48,9 +48,27 @@ const typeDefs = gql`
         ${marketTypeSharedFields}
     }
 
+    type MovingAverageDataPoint {
+        value: Float
+        datetime: String
+    }
+
+    type MovingAverageInputSummary {
+        periodLength: Int
+        samples: Int
+        algorithm: String
+    }
+
+    type MovingAverage {
+        value: Float
+        input: MovingAverageInputSummary
+        dataPoints: [MovingAverageDataPoint]
+        confidence: Float
+    }
+
     type SingleMarket {
         ${marketTypeSharedFields}
-        movingAverage(movingAverageInput: MovingAverageInput): Float
+        movingAverage(movingAverageInput: MovingAverageInput): MovingAverage
     }
 
     type CrunchedMarketData {
