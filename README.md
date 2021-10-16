@@ -19,9 +19,9 @@ Find the currency in the db by doing a LIKE query on `currency.name`. Look at pr
 ### initial setup
 
 1. `cp .env.sample .env` and fill in values
-`docker-compose build`
-2. `docker-compose run api yarn --silent`
-3. `docker-compose run api yarn run migrate`
+2. `docker-compose build`
+3. `docker-compose run api yarn --silent`
+4. `docker-compose run api yarn run migrate`
 
 ## 3.0 work on
 
