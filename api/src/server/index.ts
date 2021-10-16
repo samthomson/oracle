@@ -1,4 +1,5 @@
 import { ApolloServer, gql } from 'apollo-server'
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core'
 import * as Resolvers from './resolvers'
 import * as Types from '../declarations'
 import Logger from '../services/logging'
@@ -132,6 +133,7 @@ const server = new ApolloServer({
         // return underlying error - to client - either way
         return err
     },
+    plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 })
 
 // needed so that relations are defined since sequelize is awkward
