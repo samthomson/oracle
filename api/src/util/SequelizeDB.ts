@@ -70,6 +70,12 @@ export const createCurrencyEntry: any = (marketId: number, logEntryId: number, p
     })
 }
 
+export const bulkCreateCurrencyEntries: any = (
+    entries: { marketId: number; logEntryId: number; priceQuote: number }[],
+) => {
+    return Models.MarketEntry.bulkCreate(entries)
+}
+
 export const getMarket = async ({
     quote,
     symbol,
