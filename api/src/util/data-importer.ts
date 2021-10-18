@@ -16,10 +16,17 @@ export const pullBittrexData = async (): Promise<void> => {
     // create an initial log entry in the db, so we have an id to relate other models against
     const logEntry = await DBUtil.createLogEntry(Types.Constants.Source.Bittrex)
     // for each market, ensure it exists in the db, then store a market rate against it
+    const bulkCreate = []
+    // ensure markets exist
     for (let i = 0; i < bittrexComposites.length; i++) {
         const market = await DBUtil.ensureExchangeMarketExistsAs(bittrexComposites[i], Types.Constants.Source.Bittrex)
-        await DBUtil.createCurrencyEntry(market.id, logEntry.id, bittrexComposites[i].lastTradeRate)
+        bulkCreate.push({
+            marketId: market.id,
+            logEntryId: logEntry.id,
+            priceQuote: bittrexComposites[i].lastTradeRate,
+        })
     }
+    await DBUtil.bulkCreateCurrencyEntries(bulkCreate)
 
     const endTime = moment()
     const milliseconds = endTime.diff(startTime)
@@ -45,10 +52,16 @@ export const pullBinanceData = async (): Promise<void> => {
     // create an initial log entry in the db, so we have an id to relate other models against
     const logEntry = await DBUtil.createLogEntry(sourceId)
     // for each market, ensure it exists in the db, then store a market rate against it
+    const bulkCreate = []
     for (let i = 0; i < binanceComposites.length; i++) {
         const market = await DBUtil.ensureExchangeMarketExistsAs(binanceComposites[i], sourceId)
-        await DBUtil.createCurrencyEntry(market.id, logEntry.id, binanceComposites[i].lastTradeRate)
+        bulkCreate.push({
+            marketId: market.id,
+            logEntryId: logEntry.id,
+            priceQuote: binanceComposites[i].lastTradeRate,
+        })
     }
+    await DBUtil.bulkCreateCurrencyEntries(bulkCreate)
 
     const endTime = moment()
     const milliseconds = endTime.diff(startTime)
