@@ -56,6 +56,10 @@
   },
   "resolutions": {
     "glob-parent": "^5.1.2",
-    "set-value": "^4.0.1"
+    "set-value": "^4.0.1",
+    "validator": "^13.7.0",
+    "ansi-regex": "^5.0.1",
+    "i": "^ 0.3.7",
+    "minimist": "^0.2.1"
   }
 }
