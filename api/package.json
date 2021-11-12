@@ -25,8 +25,8 @@
     "migrate": "ts-node src/db/migrate.ts"
   },
   "dependencies": {
-    "apollo-server": "3.4.1",
-    "apollo-server-core": "^3.4.0",
+    "apollo-server": "3.5",
+    "apollo-server-core": "3.5",
     "app-root-path": "^3.0.0",
     "ccxt": "^1.49.13",
     "cron": "^1.8.2",
