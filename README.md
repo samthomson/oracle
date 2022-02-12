@@ -4,7 +4,14 @@ A crypto currency moving average service. It logs prices at frequent intervals, 
 
 Originally built around nomics api data, now it polls exchanges directly (currently bittrex and binance).
 
-## 1.0 how it works
+
+1. [How it works](#10-how-it-works)
+2. [Setting up](#20-setting-up)
+3. [Working on](#30-working-on)
+4. [Deploying](#40-deploying)
+5. [Using](#50-using)
+
+## 1.0 How it works
 
 - call exchange every x minutes to get all currency prices, store in db.
 - calculate a short and long moving average for each currency every y minutes and store in db.
@@ -14,7 +21,7 @@ Originally built around nomics api data, now it polls exchanges directly (curren
 
 Find the currency in the db by doing a LIKE query on `currency.name`. Look at prices of returned records and pick one matching market data (bittrex/binance). Then take it's `nomicsId` which can be used in a symbol map.
 
-## 2.0 set up
+## 2.0 Setting up
 
 ### initial setup
 
@@ -23,7 +30,7 @@ Find the currency in the db by doing a LIKE query on `currency.name`. Look at pr
 3. `docker-compose run api yarn --silent`
 4. `docker-compose run api yarn run migrate`
 
-## 3.0 work on
+## 3.0 Working on
 
 `docker-compose up`
 
@@ -74,7 +81,7 @@ run `yarn run migrate` from the `api` container. (`docker-compose run api yarn r
 
 test migration SQL here https://www.eversql.com/sql-syntax-check-validator/
 
-## 4.0 deploy
+## 4.0 Deploying
 
 Due to constant DB writes, it requires a certain level of CPU power. Currently running on Digital Ocean Basic 2GB with 2 vCPUs.
 
@@ -94,6 +101,8 @@ Due to constant DB writes, it requires a certain level of CPU power. Currently r
 The prod docker-compose maps the log directory from the container to the host. So can be downloaded via scp (run command from root):
 
 `bash ./bash/download-logs.sh` (to `/serverlogs`)
+
+## 5.0 Using
 
 # 6.0 Speed optimizing
 
