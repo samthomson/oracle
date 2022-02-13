@@ -112,6 +112,40 @@ The prod docker-compose maps the log directory from the container to the host. S
 
 ## 5.0 Using
 
+The API can be explored via a graphiql UI.
+
+## single moving average
+
+Here we ask for a ten hour moving average (**10** samples at **60** minute intervals) on the **DOGE/BTC** market.
+```
+query {
+  market( input:{symbol:"DOGE", quote:"BTC", sourceId:1}) {
+    movingAverage(movingAverageInput:{samples:10, periodLength:60}) {
+      value
+      input {
+        periodLength
+        samples
+        algorithm
+      }
+      confidence
+      dataPoints {
+        value
+        datetime
+      }
+    }
+  }
+}
+```
+
+There are five required params:
+
+- symbol: the target coin
+- quote: the market the coin is quoted in
+- sourceId: on what exchange/aggregator (0 = nomics, 1 = bittrex, 2 = binance)
+- samples: how many data points to use to calculate the moving average
+- period length: how many minutes apart the data points should be
+
+In the above query we get the `value` (the calculated moving average), a summary of the query/input including the algorithm used to calculate the moving average, a confidence score (max 100, reflecting the number of data points used - can be lower if the oracle is missing data/prices), and the data points (the stored/historic prices used to calculate the moving average).
 # 6.0 Speed optimizing
 
 It's too slow at present and this constraint has prevented adding more exchanges/markets. Data is not being recorded/crunched fast enough, such that crunched MAs for currencies are lagging (by hours in cases).
