@@ -37,6 +37,14 @@ Find the currency in the db by doing a LIKE query on `currency.name`. Look at pr
 - api: `//localhost:3800`
 - phpmyadmin: `//localhost:8082`
 
+The docker-compose files start the project differently in development to production. In Production it will automatically acquire data from exchanges and start the api/server, however in development only the api/server is started and so data gathering must be started separately.
+
+To start gathering data run `docker-compose run api yarn run forever`. That will - as in production - run a file that registers several cron like tasks to run on cycles (importing data, and crunching moving averages).
+
+Explore the server package file (`~/oracle/api/package.json`) for other scripts that can be run from the api container (start with `docker-compose run api sh`).
+
+Once the service has started acquiring data it can return moving averages via the API. The service needs to run (and acquire data) for longer than the shortest moving average you want to query. eg a ten hour moving average requires ten hours of samples, otherwise it will use the data it has and give a corresponding low (<100) confidence score.
+
 ### 3.1 handy scripts
 
 #### price data grouped in to periods with latest value per period shown
