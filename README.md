@@ -147,7 +147,9 @@ There are five required params (three to select the market, and two for calculat
 
 In the above query we get the `value` (the calculated moving average), a summary of the query/input including the algorithm used to calculate the moving average, a confidence score (max 100, reflecting the number of data points used - can be lower if the oracle is missing data/prices), and the data points (the stored/historic prices used to calculate the moving average).
 
-## crunched moving averages
+Note: Since the `movingAverage` query field/resolver is calculated on the fly, if this is queried for a `markets` (multiple) and not `market` (single) it will result in very slow queries. In this case query for pre-calculated moving averages.
+
+## pre-calculated (crunched) moving averages
 
 The oracle will pre-calculate moving averages as it acquires data, so that these can be queried more quickly - and importantly for multiple currencies in one go.
 
@@ -173,9 +175,13 @@ There are just the three required parameters to select the market:
 - sourceId: on what exchange/aggregator (0 = nomics, 1 = bittrex, 2 = binance)
 
 Three pre-calculated moving averages can be queried:
+
 - instant: three/five minutes
 - half hour (between ten and thirty data points at 3 to 1 minute intervals respectively)
 - ten hour (ten data points taken at 60 minute intervals)
+
+Note: This query field/resolver can be used within a `market` and `markets` query all the same. The data is pre-calculated and pulled from the database with a join, so is a performant way to get moving averages for all markets at once.
+
 # 6.0 Speed optimizing
 
 It's too slow at present and this constraint has prevented adding more exchanges/markets. Data is not being recorded/crunched fast enough, such that crunched MAs for currencies are lagging (by hours in cases).
