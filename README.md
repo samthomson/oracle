@@ -112,7 +112,7 @@ The prod docker-compose maps the log directory from the container to the host. S
 
 ## 5.0 Using
 
-The API can be explored via a graphiql UI.
+The API can be explored via a graphiql UI at the top level of the API server (`/`).
 
 ## single moving average
 
@@ -137,21 +137,21 @@ query {
 }
 ```
 
-There are five required params (three to select the market, and two for calculating the moving average):
+There are five required parameters (three to select the market, and two for calculating the moving average):
 
-- symbol: the target coin
-- quote: the market the coin is quoted in
-- sourceId: on what exchange/aggregator (0 = nomics, 1 = bittrex, 2 = binance)
-- samples: how many data points to use to calculate the moving average
-- period length: how many minutes apart the data points should be
+- **symbol**: the target coin
+- **quote**: the market the coin is quoted in
+- **sourceId**: what exchange/aggregator (0 = nomics, 1 = bittrex, 2 = binance) to use price data from
+- **samples**: how many data points to use for calculating the moving average
+- **periodLength**: the interval; how many minutes apart the data points should be
 
-In the above query we get the `value` (the calculated moving average), a summary of the query/input including the algorithm used to calculate the moving average, a confidence score (max 100, reflecting the number of data points used - can be lower if the oracle is missing data/prices), and the data points (the stored/historic prices used to calculate the moving average).
+In the above query we get the `value` (the calculated moving average), a summary of the query/input including the algorithm used to calculate the moving average, a confidence score (out of 100, reflecting the number of data points used - can be lower if the oracle is missing data/prices), and the data points (the stored/historic prices used to calculate the moving average).
 
-Note: Since the `movingAverage` query field/resolver is calculated on the fly, if this is queried for a `markets` (multiple) and not `market` (single) it will result in very slow queries. In this case query for pre-calculated moving averages.
+Note: Since the `movingAverage` query field/resolver is calculated on the fly, if this is queried for within a `markets` (multiple) and not `market` (single) query it will result in very slow queries. In this case you should query for pre-calculated moving averages.
 
 ## pre-calculated (crunched) moving averages
 
-The oracle will pre-calculate moving averages as it acquires data, so that these can be queried more quickly - and importantly for multiple currencies in one go.
+The oracle will pre-calculate moving averages as it acquires data, so that these can be queried more quickly - and notably for multiple currencies in one go.
 
 ### for one market
 
@@ -177,8 +177,8 @@ There are just the three required parameters to select the market:
 Three pre-calculated moving averages can be queried:
 
 - instant: three/five minutes
-- half hour (between ten and thirty data points at 3 to 1 minute intervals respectively)
-- ten hour (ten data points taken at 60 minute intervals)
+- half hour: between ten and thirty data points at 3 to 1 minute intervals respectively
+- ten hour: ten data points taken at 60 minute intervals
 
 Note: This query field/resolver can be used within a `market` and `markets` query all the same. The data is pre-calculated and pulled from the database with a join, so is a performant way to get moving averages for all markets at once.
 
